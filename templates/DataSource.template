@@ -1,0 +1,911 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Enterprise Accelerator - Provides nesting for required stacks to deploy a full sample web application with reverse proxy, ELBs, IAM, and other resources (for demonstration/POC/testing) QS(0018)",
+    "Metadata": {
+        "AWS::CloudFormation::Interface": {
+            "ParameterGroups": [
+                {
+                    "Label": {
+                        "default": "Region Config"
+                    },
+                    "Parameters": [
+                        "pRegionAZ1Name",
+                        "pRegionAZ2Name"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "Network (existing VPC config)"
+                    },
+                    "Parameters": [
+                        "pProductionCIDR",
+                        "pProductionVPC",
+                        "pDMZSubnetA",
+                        "pDMZSubnetB",
+                        "pAppPrivateSubnetA",
+                        "pAppPrivateSubnetB",
+                        "pDBPrivateSubnetA",
+                        "pDBPrivateSubnetB"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "Application Configuration"
+                    },
+                    "Parameters": [
+                        "pWebInstanceType",
+                        "pWebServerAMI",
+                        "pAppInstanceType",
+                        "pAppAmi"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "Database Configurations"
+                    },
+                    "Parameters": [
+                        "pDBName",
+                        "pDBUser",
+                        "pDBPassword",
+                        "pDBClass",
+                        "pDBAllocatedStorage",
+                        "pRSPassword"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "AWS Quick Start Configuration"
+                    },
+                    "Parameters": [
+                        "QuickStartS3URL",
+                        "QSS3BucketName",
+                        "QSS3KeyPrefix"
+                    ]
+                }
+            ]
+        },
+        "Stack": {
+            "Value": 3
+        },
+        "VersionDate": {
+            "Value": 20160510
+        },
+        "Identifier": {
+            "Value": "template-application"
+        },
+        "Input": {
+            "Description": "VPC, SubnetIDs, S3 bucket names, CIDR blocks, KeyNames, AMIs, DB name and password"
+        },
+        "Output": {
+            "Description": "Outputs ID of all deployed resources"
+        },
+        "AWS::CloudFormation::Designer": {
+            "d304f1e3-4a44-48fc-bd3e-ca1ae03aae9c": {
+                "size": {
+                    "width": 240,
+                    "height": 240
+                },
+                "position": {
+                    "x": 60,
+                    "y": 90
+                },
+                "z": 1,
+                "embeds": [
+                    "ac4f33e1-90aa-4ff7-bb1e-027f92be4e13"
+                ]
+            },
+            "513fe052-d06e-4678-a16a-19021407af29": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 360,
+                    "y": 330
+                },
+                "z": 1,
+                "embeds": []
+            },
+            "6cf08e46-6787-42f0-8a21-4947f424ad24": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 150,
+                    "y": 330
+                },
+                "z": 1,
+                "embeds": [],
+                "isassociatedwith": [
+                    "513fe052-d06e-4678-a16a-19021407af29"
+                ],
+                "dependson": [
+                    "513fe052-d06e-4678-a16a-19021407af29"
+                ]
+            },
+            "33d926fe-b6af-46e2-8f20-98c76e2bd411": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 410,
+                    "y": 80
+                },
+                "z": 1,
+                "embeds": [],
+                "isrelatedto": [
+                    "b504f451-f238-4a15-9e47-01102ae0104a"
+                ]
+            },
+            "ac4f33e1-90aa-4ff7-bb1e-027f92be4e13": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 90,
+                    "y": 150
+                },
+                "z": 2,
+                "parent": "d304f1e3-4a44-48fc-bd3e-ca1ae03aae9c",
+                "embeds": [],
+                "isassociatedwith": [
+                    "33d926fe-b6af-46e2-8f20-98c76e2bd411"
+                ],
+                "dependson": [
+                    "d304f1e3-4a44-48fc-bd3e-ca1ae03aae9c",
+                    "33d926fe-b6af-46e2-8f20-98c76e2bd411"
+                ]
+            },
+            "3b9902b0-0fd2-431b-89e1-7d2ab3358313": {
+                "size": {
+                    "width": 250,
+                    "height": 240
+                },
+                "position": {
+                    "x": 50,
+                    "y": -180
+                },
+                "z": 0,
+                "embeds": [
+                    "501dbf3c-015d-4d63-ad59-96efdc50c822"
+                ]
+            },
+            "501dbf3c-015d-4d63-ad59-96efdc50c822": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 120,
+                    "y": -110
+                },
+                "z": 1,
+                "parent": "3b9902b0-0fd2-431b-89e1-7d2ab3358313",
+                "embeds": [],
+                "dependson": [
+                    "3b9902b0-0fd2-431b-89e1-7d2ab3358313",
+                    "33d926fe-b6af-46e2-8f20-98c76e2bd411"
+                ],
+                "isrelatedto": [
+                    "33d926fe-b6af-46e2-8f20-98c76e2bd411"
+                ]
+            },
+            "dbe26a0f-0b34-4f50-8722-68f9fccd6f11": {
+                "source": {
+                    "id": "501dbf3c-015d-4d63-ad59-96efdc50c822"
+                },
+                "target": {
+                    "id": "3b9902b0-0fd2-431b-89e1-7d2ab3358313"
+                },
+                "z": 3
+            },
+            "9cbb0db4-7d13-4647-a6a6-ad4e30c6156d": {
+                "source": {
+                    "id": "501dbf3c-015d-4d63-ad59-96efdc50c822"
+                },
+                "target": {
+                    "id": "33d926fe-b6af-46e2-8f20-98c76e2bd411"
+                },
+                "z": 3
+            },
+            "02fe4f4a-7d84-4ccf-85d9-3cdf97f4d02b": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 410,
+                    "y": 210
+                },
+                "z": 0,
+                "embeds": []
+            },
+            "320e0961-99e9-4d5f-96b1-4ec40318ab58": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 750,
+                    "y": 650
+                },
+                "z": 0,
+                "embeds": []
+            },
+            "94c65625-1a51-490c-9274-b3fed2964ef9": {
+                "source": {
+                    "id": "02fe4f4a-7d84-4ccf-85d9-3cdf97f4d02b",
+                    "selector": "g:nth-child(1) g:nth-child(4) g:nth-child(1) circle:nth-child(1)     ",
+                    "port": "AWS::DependencyLink-*"
+                },
+                "target": {
+                    "id": "0f420611-6704-4f0e-8303-5fc615b4e9f5"
+                },
+                "z": 4
+            },
+            "adf2e630-ac4f-42b7-9fab-6e2087859dcd": {
+                "source": {
+                    "id": "02fe4f4a-7d84-4ccf-85d9-3cdf97f4d02b",
+                    "selector": "g:nth-child(1) g:nth-child(4) g:nth-child(1) circle:nth-child(1)     ",
+                    "port": "AWS::DependencyLink-*"
+                },
+                "target": {
+                    "id": "fb7c5500-f865-4d18-ae7f-c575971855ef"
+                },
+                "z": 4
+            },
+            "178236ae-09e5-4f6d-a070-43df6d4e0530": {
+                "source": {
+                    "id": "02fe4f4a-7d84-4ccf-85d9-3cdf97f4d02b",
+                    "selector": "g:nth-child(1) g:nth-child(4) g:nth-child(1) circle:nth-child(1)     ",
+                    "port": "AWS::DependencyLink-*"
+                },
+                "target": {
+                    "id": "0f420611-6704-4f0e-8303-5fc615b4e9f5"
+                },
+                "z": 4
+            },
+            "1c2ee98a-a921-445a-964e-292191f2c822": {
+                "source": {
+                    "id": "02fe4f4a-7d84-4ccf-85d9-3cdf97f4d02b",
+                    "selector": "g:nth-child(1) g:nth-child(4) g:nth-child(1) circle:nth-child(1)     ",
+                    "port": "AWS::DependencyLink-*"
+                },
+                "target": {
+                    "id": "0f420611-6704-4f0e-8303-5fc615b4e9f5"
+                },
+                "z": 4
+            },
+            "d3665231-cd05-4a60-b8f2-9b073389e940": {
+                "source": {
+                    "id": "02fe4f4a-7d84-4ccf-85d9-3cdf97f4d02b",
+                    "selector": "g:nth-child(1) g:nth-child(4) g:nth-child(1) circle:nth-child(1)     ",
+                    "port": "AWS::DependencyLink-*"
+                },
+                "target": {
+                    "id": "fb7c5500-f865-4d18-ae7f-c575971855ef"
+                },
+                "z": 4
+            },
+            "8e4c8d00-25dc-4b66-b063-6568ac9eb490": {
+                "source": {
+                    "id": "02fe4f4a-7d84-4ccf-85d9-3cdf97f4d02b",
+                    "selector": "g:nth-child(1) g:nth-child(4) g:nth-child(1) circle:nth-child(1)     ",
+                    "port": "AWS::DependencyLink-*"
+                },
+                "target": {
+                    "id": "fb7c5500-f865-4d18-ae7f-c575971855ef"
+                },
+                "z": 4
+            },
+            "db2a5dce-bb13-48f0-947f-646d2d2bd938": {
+                "source": {
+                    "id": "02fe4f4a-7d84-4ccf-85d9-3cdf97f4d02b",
+                    "selector": "g:nth-child(1) g:nth-child(4) g:nth-child(1) circle:nth-child(1)     ",
+                    "port": "AWS::DependencyLink-*"
+                },
+                "target": {
+                    "id": "fb7c5500-f865-4d18-ae7f-c575971855ef"
+                },
+                "z": 4
+            }
+        }
+    },
+    "Parameters": {
+        "pSecurityAlarmTopic": {
+            "Description": "SNS topic for alarms and notifications",
+            "Type": "String",
+            "Default": ""
+        },
+        "pEC2KeyPair": {
+            "Description": "Key Name for Instance",
+            "Type": "String",
+            "Default": ""
+        },
+        "pProductionCIDR": {
+            "Description": "Production VPC CIDR",
+            "Type": "String"
+        },
+        "pManagementCIDR": {
+            "Description": "Management VPC CIDR",
+            "Type": "String"
+        },
+        "pProductionVPC": {
+            "Description": "Production VPC",
+            "Type": "AWS::EC2::VPC::Id"
+        },
+        "pBastionSSHCIDR": {
+            "Description": "CIDR block (optional) of Public IPs allowed to access Bastion instance in this deployment",
+            "Type": "String",
+            "Default": "0.0.0.0/0"
+        },
+        "pDMZSubnetA": {
+            "Description": "DMZ Subnet A",
+            "Type": "AWS::EC2::Subnet::Id"
+        },
+        "pDMZSubnetB": {
+            "Description": "DMZ Subnet B",
+            "Type": "AWS::EC2::Subnet::Id"
+        },
+        "pAppPrivateSubnetA": {
+            "Description": "WebApp Subnet A",
+            "Type": "AWS::EC2::Subnet::Id"
+        },
+        "pAppPrivateSubnetB": {
+            "Description": "WebApp Subnet A",
+            "Type": "AWS::EC2::Subnet::Id"
+        },
+        "pWebInstanceType": {
+            "Description": "Instance type for the webservers",
+            "Type": "String"
+        },
+        "pAppInstanceType": {
+            "Description": "Instance type for the app webservers",
+            "Type": "String"
+        },
+        "pDBPrivateSubnetA": {
+            "Description": "rDBPrivateSubnetA",
+            "Type": "AWS::EC2::Subnet::Id"
+        },
+        "pDBPrivateSubnetB": {
+            "Description": "rDBPrivateSubnetB",
+            "Type": "AWS::EC2::Subnet::Id"
+        },
+        "pRegionAZ1Name": {
+            "Description": "rDBPrivateSubnetB",
+            "Type": "AWS::EC2::AvailabilityZone::Name"
+        },
+        "pRegionAZ2Name": {
+            "Description": "rDBPrivateSubnetB",
+            "Type": "AWS::EC2::AvailabilityZone::Name"
+        },
+        "pWebServerAMI": {
+            "Description": "Which webserver AMI do you want to use, default",
+            "Type": "String",
+            "Default": "none"
+        },
+        "pAppAmi": {
+            "Description": "Which App AMI do you want to use?",
+            "Type": "String",
+            "Default": "none"
+        },
+        "pDBName": {
+            "Description": "Name of RDS Database",
+            "Type": "String"
+        },
+        "pDBUser": {
+            "Description": "Username of DB Instance",
+            "Type": "String"
+        },
+        "pDBPassword": {
+            "Description": "Password of DB Instance",
+            "NoEcho": true,
+            "Type": "String"
+        },
+        "pDBClass": {
+            "Description": "Instance class of RDS instance",
+            "Type": "String"
+        },
+        "pDBAllocatedStorage": {
+            "Description": "Allocated Storage (in GB) for RDS instance",
+            "Type": "String"
+        },
+        "pRSPassword": {
+            "Description": "Password of DB Instance",
+            "NoEcho": true,
+            "Type": "String"
+        },
+        "pEnvironment": {
+            "Description": "Environment type (development, test, or production)",
+            "Type": "String",
+            "Default": "development"
+        },
+        "pSupportsGlacier": {
+            "Description": "Determines whether this region supports Glacier (passed in from main template)",
+            "Type": "String",
+            "Default": "true"
+        },
+        "QSS3BucketName": {
+            "AllowedPattern": "^[0-9a-zA-Z]+([0-9a-zA-Z-.]*[0-9a-zA-Z])*$",
+            "ConstraintDescription": "Quick Start bucket name can include numbers, lowercase letters, uppercase letters, periods (.), and hyphens (-). It cannot start or end with a hyphen (-).",
+            "Default": "quickstart-reference",
+            "Description": "S3 bucket name for the Quick Start assets. Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).",
+            "Type": "String"
+        },
+        "QSS3KeyPrefix": {
+            "AllowedPattern": "^[0-9a-zA-Z-]+(/[0-9a-zA-Z-]+)*$",
+            "ConstraintDescription": "Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/). It cannot start or end with forward slash (/) because they are automatically appended.",
+            "Default": "enterprise-accelerator/pci/latest",
+            "Description": "S3 key prefix for the Quick Start assets. Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/). It cannot start or end with forward slash (/) because they are automatically appended.",
+            "Type": "String"
+        },
+        "QuickStartS3URL": {
+            "Description": "Quick Start S3 URL prefix.",
+            "Default": "https://s3.amazonaws.com",
+            "Type": "String"
+        },
+        "createRDS": {
+            "Description": "Create RDS.",
+            "Type": "String",
+            "Default": "false",
+            "AllowedValues": [
+                "true",
+                "false"
+            ]
+        },
+        "createRedshift": {
+            "Description": "Create Redshift.",
+            "Type": "String",
+            "Default": "false",
+            "AllowedValues": [
+                "true",
+                "false"
+            ]
+        },
+        "createEMR": {
+            "Description": "Create EMR.",
+            "Type": "String",
+            "Default": "false",
+            "AllowedValues": [
+                "true",
+                "false"
+            ]
+        },
+        "createMultiAZ": {
+            "Description": "Create multiple availability zones.",
+            "Type": "String",
+            "Default": "false",
+            "AllowedValues": [
+                "true",
+                "false"
+            ]
+        }
+    },
+    "Mappings": {
+        "elbMap": {
+            "us-east-1": {
+                "ELB": "127311923021"
+            },
+            "us-east-2": {
+                "ELB": "033677994240"
+            },
+            "us-west-1": {
+                "ELB": "027434742980"
+            },
+            "us-west-2": {
+                "ELB": "797873946194"
+            },
+            "ca-central-1": {
+                "ELB": "985666609251"
+            },
+            "eu-west-1": {
+                "ELB": "156460612806"
+            },
+            "eu-west-2": {
+                "ELB": "652711504416"
+            },
+            "ap-south-1": {
+                "ELB": "718504428378"
+            },
+            "ap-southeast-2": {
+                "ELB": "783225319266"
+            },
+            "ap-southeast-1": {
+                "ELB": "114774131450"
+            },
+            "ap-northeast-1": {
+                "ELB": "582318560864"
+            },
+            "ap-northeast-2": {
+                "ELB": "600734575887"
+            },
+            "eu-central-1": {
+                "ELB": "054676820928"
+            },
+            "sa-east-1": {
+                "ELB": "507241528517"
+            },
+            "us-gov-west-1": {
+                "ELB": "048591011584"
+            }
+        }
+    },
+    "Conditions": {
+        "IsGovCloud": {
+            "Fn::Equals": [
+                {
+                    "Ref": "AWS::Region"
+                },
+                "us-gov-west-1"
+            ]
+        },
+        "SupportsGlacier": {
+            "Fn::Equals": [
+                {
+                    "Ref": "pSupportsGlacier"
+                },
+                true
+            ]
+        },
+        "CreateRdsCondition": {
+            "Fn::Equals": [
+                {
+                    "Ref": "createRDS"
+                },
+                "true"
+            ]
+        },
+        "CreateRedshiftCondition": {
+            "Fn::Equals": [
+                {
+                    "Ref": "createRedshift"
+                },
+                "true"
+            ]
+        },
+        "CreateEmrCondition": {
+            "Fn::Equals": [
+                {
+                    "Ref": "createEMR"
+                },
+                "true"
+            ]
+        },
+        "CreateMultiAzCondition": {
+            "Fn::Equals": [
+                {
+                    "Ref": "createMultiAZ"
+                },
+                "true"
+            ]
+        }
+    },
+    "Resources": {
+        "rSecurityGroupRDS": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "Port 3306 database for access",
+                "VpcId": {
+                    "Ref": "pProductionVPC"
+                },
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": 3306,
+                        "ToPort": 3306,
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "sg-database-access"
+                    },
+                    {
+                        "Key": "Environment",
+                        "Value": {
+                            "Ref": "pEnvironment"
+                        }
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "33d926fe-b6af-46e2-8f20-98c76e2bd411"
+                }
+            }
+        },
+        "rTalendStorageBucket": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+                "AccessControl": "Private",
+                "LifecycleConfiguration": {
+                    "Rules": [
+                        {
+                            "Id": "Transition90daysRetain7yrs",
+                            "Status": "Enabled",
+                            "ExpirationInDays": 2555,
+                            "Transition": {
+                                "TransitionInDays": 90,
+                                "StorageClass": {
+                                    "Fn::If": [
+                                        "SupportsGlacier",
+                                        "GLACIER",
+                                        "STANDARD_IA"
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                "VersioningConfiguration": {
+                    "Status": "Enabled"
+                }
+            },
+            "DeletionPolicy": "Delete",
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "513fe052-d06e-4678-a16a-19021407af29"
+                }
+            }
+        },
+        "rTalendStorageS3Policy": {
+            "Type": "AWS::S3::BucketPolicy",
+            "DependsOn": "rTalendStorageBucket",
+            "Properties": {
+                "Bucket": {
+                    "Ref": "rTalendStorageBucket"
+                },
+                "PolicyDocument": {
+                    "Statement": [
+                        {
+                            "Sid": "EnforceSecureTransport",
+                            "Action": "s3:*",
+                            "Effect": "Allow",
+                            "Principal": "*",
+                            "Resource": {
+                                "Fn::Sub": [
+                                    "arn:${Endpoint}:s3:::${rTalendStorageBucket}",
+                                    {
+                                        "Endpoint": {
+                                            "Fn::If": [
+                                                "IsGovCloud",
+                                                "aws-us-gov",
+                                                "aws"
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
+                            "Condition": {
+                                "Bool": {
+                                    "aws:SecureTransport": "false"
+                                }
+                            }
+                        },
+                        {
+                            "Sid": "EnforceEncryptionOnPut",
+                            "Effect": "Deny",
+                            "Principal": "*",
+                            "Action": "s3:PutObject",
+                            "Resource": {
+                                "Fn::Sub": [
+                                    "arn:${Endpoint}:s3:::${rTalendStorageBucket}/*",
+                                    {
+                                        "Endpoint": {
+                                            "Fn::If": [
+                                                "IsGovCloud",
+                                                "aws-us-gov",
+                                                "aws"
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
+                            "Condition": {
+                                "StringNotEquals": {
+                                    "s3:x-amz-server-side-encryption": "AES256"
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "6cf08e46-6787-42f0-8a21-4947f424ad24"
+                }
+            }
+        },
+        "rDBSubnetGroup": {
+            "Type": "AWS::RDS::DBSubnetGroup",
+            "Properties": {
+                "DBSubnetGroupDescription": "MySQL RDS Subnet Group",
+                "SubnetIds": [
+                    {
+                        "Ref": "pDBPrivateSubnetA"
+                    },
+                    {
+                        "Ref": "pDBPrivateSubnetB"
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "d304f1e3-4a44-48fc-bd3e-ca1ae03aae9c"
+                }
+            }
+        },
+        "rRDSInstanceMySQL": {
+            "Type": "AWS::RDS::DBInstance",
+            "DependsOn": [
+                "rDBSubnetGroup",
+                "rSecurityGroupRDS"
+            ],
+            "Condition": "CreateRdsCondition",
+            "Properties": {
+                "DBName": {
+                    "Ref": "pDBName"
+                },
+                "Engine": "MySQL",
+                "MultiAZ": {
+                    "Fn::If": [
+                        "CreateMultiAzCondition",
+                        true,
+                        false
+                    ]
+                },
+                "StorageEncrypted": true,
+                "MasterUsername": {
+                    "Ref": "pDBUser"
+                },
+                "MasterUserPassword": {
+                    "Ref": "pDBPassword"
+                },
+                "DBInstanceClass": {
+                    "Ref": "pDBClass"
+                },
+                "AllocatedStorage": {
+                    "Ref": "pDBAllocatedStorage"
+                },
+                "VPCSecurityGroups": [
+                    {
+                        "Ref": "rSecurityGroupRDS"
+                    }
+                ],
+                "DBSubnetGroupName": {
+                    "Ref": "rDBSubnetGroup"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "ac4f33e1-90aa-4ff7-bb1e-027f92be4e13"
+                }
+            }
+        },
+        "rRSSubnetGroup": {
+            "Type": "AWS::Redshift::ClusterSubnetGroup",
+            "Properties": {
+                "Description": "RedShift Subnet linked to both private database subnets",
+                "SubnetIds": [
+                    {
+                        "Ref": "pDBPrivateSubnetA"
+                    },
+                    {
+                        "Ref": "pDBPrivateSubnetB"
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "3b9902b0-0fd2-431b-89e1-7d2ab3358313"
+                }
+            }
+        },
+        "rRedShiftInstance": {
+            "Type": "AWS::Redshift::Cluster",
+            "Condition": "CreateRedshiftCondition",
+            "Properties": {
+                "ClusterSubnetGroupName": {
+                    "Ref": "rRSSubnetGroup"
+                },
+                "ClusterType": "single-node",
+                "NodeType": "dc1.large",
+                "DBName": "testredshift",
+                "MasterUsername": "testuserrs",
+                "MasterUserPassword": {
+                    "Ref": "pRSPassword"
+                },
+                "Port": 3306,
+                "PubliclyAccessible": false
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "501dbf3c-015d-4d63-ad59-96efdc50c822"
+                }
+            },
+            "DependsOn": [
+                "rRSSubnetGroup",
+                "rSecurityGroupRDS"
+            ]
+        },
+        "rEMRInstance": {
+            "Type": "AWS::EMR::Cluster",
+            "Condition": "CreateEmrCondition",
+            "Properties": {
+                "Instances": {
+                    "MasterInstanceGroup": {
+                        "InstanceCount": 1,
+                        "InstanceType": "m4.large",
+                        "Market": "ON_DEMAND",
+                        "Name": "Master instance group - 1"
+                    },
+                    "CoreInstanceGroup": {
+                        "InstanceCount": 1,
+                        "InstanceType": "m4.large",
+                        "Market": "ON_DEMAND",
+                        "Name": "Core instance group - 2"
+                    },
+                    "TerminationProtected": false,
+                    "Ec2SubnetId": {
+                        "Ref": "pAppPrivateSubnetA"
+                    },
+                    "Ec2KeyName": {
+                        "Ref": "pEC2KeyPair"
+                    }
+                },
+                "Applications": [
+                    {
+                        "Name": "Hadoop"
+                    },
+                    {
+                        "Name": "Hive"
+                    },
+                    {
+                        "Name": "Pig"
+                    },
+                    {
+                        "Name": "Spark"
+                    }
+                ],
+                "ReleaseLabel": "emr-5.0.0",
+                "Name": "rEMRInstance",
+                "JobFlowRole": "EMR_EC2_DefaultRole",
+                "ServiceRole": "EMR_DefaultRole",
+                "VisibleToAllUsers": true,
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    "emr-instance-",
+                                    {
+                                        "Ref": "AWS::StackName"
+                                    },
+                                    ""
+                                ]
+                            ]
+                        }
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "02fe4f4a-7d84-4ccf-85d9-3cdf97f4d02b"
+                }
+            }
+        }
+    },
+    "Outputs": {
+        "rSecurityGroupRDS": {
+            "Value": {
+                "Ref": "rSecurityGroupRDS"
+            }
+        }
+    }
+}
