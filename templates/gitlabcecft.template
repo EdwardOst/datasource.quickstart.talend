@@ -15,9 +15,6 @@
                         "VPCID"
                     ]
                 },
-                
-                
-                
                 {
                     "Label": {
                         "default": "Server Configuration"
@@ -59,8 +56,6 @@
                 "VPCCIDR": {
                     "default": "VPC CIDR"
                 },
-              
-                
                 "VolumeType": {
                     "default": "Volume Type"
                 },
@@ -137,7 +132,8 @@
                 ],
                 "isrelatedto": [
                     "025b9340-13da-4f8d-91aa-f71e191e3477",
-                    "550b18ae-06ce-4d3b-b032-6b2affe7c18f"
+                    "550b18ae-06ce-4d3b-b032-6b2affe7c18f",
+                    "990cae06-9cfc-400a-b6bc-a788d7441ec5"
                 ]
             },
             "1b461d29-d4aa-4cd1-9e9d-055d21edea64": {
@@ -154,6 +150,15 @@
                 "isassociatedwith": [
                     "990cae06-9cfc-400a-b6bc-a788d7441ec5"
                 ]
+            },
+            "05a9f369-7251-44ca-b7d7-c1356e3da632": {
+                "source": {
+                    "id": "110cbc42-710d-4116-a689-f74371f69ff7"
+                },
+                "target": {
+                    "id": "990cae06-9cfc-400a-b6bc-a788d7441ec5"
+                },
+                "z": 2
             }
         }
     },
@@ -234,7 +239,7 @@
                 ]
             }
         },
-		"rGitSecurityGroup": {
+        "rGitSecurityGroup": {
             "Value": {
                 "Ref": "rGitSecurityGroup"
             }
@@ -267,8 +272,6 @@
             "MinLength": "9",
             "Type": "String"
         },
-      
-      
         "InstanceType": {
             "AllowedValues": [
                 "m3.xlarge",
@@ -278,7 +281,7 @@
                 "c3.2xlarge",
                 "c3.4xlarge",
                 "c3.8xlarge",
-				"c4.large",
+                "c4.large",
                 "c4.2xlarge",
                 "c4.4xlarge",
                 "c4.8xlarge",
@@ -298,17 +301,12 @@
             "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instance",
             "Type": "AWS::EC2::KeyPair::KeyName"
         },
-   
-
         "ProvisionedIops": {
             "ConstraintDescription": "Range is 100 to 20000 for Provisioned IOPS SSD volumes",
-			"Default": "100",
+            "Default": "100",
             "Description": "Set the provisioned IOPs between 100 and 20000. Only set if you are choosing io1 for your volume type",
             "Type": "String"
         },
-       
-        
-        
         "SubnetId": {
             "Description": "The Public subnet where the GitLab CE instance will be launched",
             "Type": "AWS::EC2::Subnet::Id"
@@ -335,9 +333,7 @@
     "Resources": {
         "EC2Instance": {
             "Metadata": {
-                "AWS::CloudFormation::Init": {
-                    
-                },
+                "AWS::CloudFormation::Init": {},
                 "AWS::CloudFormation::Designer": {
                     "id": "990cae06-9cfc-400a-b6bc-a788d7441ec5"
                 }
@@ -400,7 +396,46 @@
                         "Key": "Name",
                         "Value": "GitLab CE"
                     }
-                ]
+                ],
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "",
+                            [
+                                "#!/bin/bash -x\n",								
+                                "gitlab-ctl reconfigure\n",
+								"sleep 1m\n",
+                                "apt-get install -y ruby\n",
+								"apt-get install -y jq\n",
+                                "gem install gitlab\n",  
+								"#Install the packages.  The wait is to prevent a stall after reconfigure\n",									
+                                "gitlab-rails runner 'User.create!(username: \"Admin\", email: \"test2@example.com\", password: \"AdminPassword\", password_confirmation: \"AdminPassword\", name: \"Admin\", admin: true)'\n",
+                                "gitlab-rails runner 'User.create!(username: \"TAC\", email: \"test@example.com\", password: \"TACPassword\", password_confirmation: \"TACPassword\", name: \"TACUser\")'\n",                     
+								"# Makes accounts.  usernames/passwords can be parameterized for final version\n",
+								"# This next section puts the ip in as the first variable and the access token as the second\n",
+								"ipvar=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)\n",
+                                "xvar=$(curl http://",
+                                "$ipvar",
+                                "/api/v3/session --data 'login=Admin&password=AdminPassword' | jq --raw-output .private_token)\n",
+								"# Creates project, clones it to local file, populates it with demo and pushes it\n",
+                                "curl --header \"PRIVATE-TOKEN: $xvar\" -X POST \"http://",
+								"$ipvar",
+								"/api/v3/projects?name=oodlejobs\"\n",
+                                "git clone http://Admin:AdminPassword@",
+                                "$ipvar",
+                                "/Admin/oodlejobs.git\n",
+                                "cd oodlejobs\n",
+                                "wget https://github.com/EdwardOst/datasource.quickstart.talend/blob/52a325676bf9ce7251b6538d504869c3e2cceefd/templates/gitlabcecft.template\n",
+                                "git add .\n",
+                                "git commit -m \"First Jobs\"\n",
+                                "git push http://Admin:AdminPassword@",
+                                "$ipvar",
+                                "/Admin/oodlejobs.git\n",
+                                "\n"
+                            ]
+                        ]
+                    }
+                }
             },
             "Type": "AWS::EC2::Instance"
         },
@@ -450,7 +485,6 @@
                 }
             }
         },
-        
         "rGitSecurityGroup": {
             "Properties": {
                 "GroupDescription": "Ports needed for GitLab CE",
