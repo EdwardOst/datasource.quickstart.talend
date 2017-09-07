@@ -128,7 +128,7 @@
 		"privateSubnet": {
             "Description": "Is this is a private subnet.",
             "Type": "String",
-			"Default": "private",
+			"Default": "public",
             "AllowedValues": [ "private", "public" ]
 		},
         "VPCID": {
