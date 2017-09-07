@@ -568,7 +568,7 @@
                     "Install": {
                         "commands": {
                             "01-install-gitlab": {
-                                "command": "source /home/ubuntu/gitlab-config.sh; source /home/ubuntu/talend-gitlab.sh; gitlab_conf gitlab_init"
+                                "command": ". /home/ubuntu/gitlab-config.sh; . /home/ubuntu/talend-gitlab.sh; gitlab_conf gitlab_init"
                             }
                         }
                     }
