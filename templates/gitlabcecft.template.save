@@ -1,0 +1,585 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "GitLab CE",
+    "Metadata": {
+        "AWS::CloudFormation::Interface": {
+            "ParameterGroups": [
+                {
+                    "Label": {
+                        "default": " VPC Network Configuration"
+                    },
+                    "Parameters": [
+                        "VPCCIDR",
+                        "AccessCIDR",
+                        "SubnetId",
+                        "VPCID"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "Server Configuration"
+                    },
+                    "Parameters": [
+                        "InstanceType",
+                        "KeyPairName",
+                        "VolumeType",
+                        "ProvisionedIops",
+                        "VolumeSize"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "AWS Quick Start Configuration"
+                    },
+                    "Parameters": [
+                        "QSS3BucketName",
+                        "QSS3KeyPrefix"
+                    ]
+                }
+            ],
+            "ParameterLabels": {
+                "KeyPairName": {
+                    "default": "Key Pair Name"
+                },
+                "QSS3BucketName": {
+                    "default": "Quick Start S3 Bucket Name"
+                },
+                "QSS3KeyPrefix": {
+                    "default": "Quick Start S3 Key Prefix"
+                },
+                "AccessCIDR": {
+                    "default": "Permitted IP range"
+                },
+                "SubnetCIDR": {
+                    "default": "Subnet CIDR"
+                },
+                "VPCCIDR": {
+                    "default": "VPC CIDR"
+                },
+                "VolumeType": {
+                    "default": "Volume Type"
+                },
+                "InstanceType": {
+                    "default": "Instance Type"
+                },
+                "ProvisionedIops": {
+                    "default": "Provisioned IOPS"
+                },
+                "VolumeSize": {
+                    "default": "Volume Size"
+                },
+                "SubnetId": {
+                    "default": "Subnet Id"
+                },
+                "VPCID": {
+                    "default": "VPC ID"
+                }
+            }
+        },
+        "AWS::CloudFormation::Designer": {
+            "17633600-2812-4565-9f9d-1f06f35b86ff": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 180,
+                    "y": 90
+                },
+                "z": 1,
+                "embeds": []
+            },
+            "8837c0a7-bb9a-4f6c-ab02-c5a72f27b02e": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 60,
+                    "y": 210
+                },
+                "z": 1,
+                "embeds": []
+            },
+            "025b9340-13da-4f8d-91aa-f71e191e3477": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 180,
+                    "y": 210
+                },
+                "z": 1,
+                "embeds": [],
+                "isassociatedwith": [
+                    "8837c0a7-bb9a-4f6c-ab02-c5a72f27b02e"
+                ]
+            },
+            "990cae06-9cfc-400a-b6bc-a788d7441ec5": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 300,
+                    "y": 90
+                },
+                "z": 1,
+                "embeds": [],
+                "isassociatedwith": [
+                    "17633600-2812-4565-9f9d-1f06f35b86ff"
+                ],
+                "isrelatedto": [
+                    "025b9340-13da-4f8d-91aa-f71e191e3477",
+                    "550b18ae-06ce-4d3b-b032-6b2affe7c18f",
+                    "990cae06-9cfc-400a-b6bc-a788d7441ec5"
+                ]
+            },
+            "1b461d29-d4aa-4cd1-9e9d-055d21edea64": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 300,
+                    "y": 310
+                },
+                "z": 1,
+                "embeds": [],
+                "isassociatedwith": [
+                    "990cae06-9cfc-400a-b6bc-a788d7441ec5"
+                ]
+            },
+            "05a9f369-7251-44ca-b7d7-c1356e3da632": {
+                "source": {
+                    "id": "110cbc42-710d-4116-a689-f74371f69ff7"
+                },
+                "target": {
+                    "id": "990cae06-9cfc-400a-b6bc-a788d7441ec5"
+                },
+                "z": 2
+            }
+        }
+    },
+    "Conditions": {
+        "GovCloudCondition": {
+            "Fn::Equals": [
+                {
+                    "Ref": "AWS::Region"
+                },
+                "us-gov-west-1"
+            ]
+        },
+        "Io1Set": {
+            "Fn::Equals": [
+                {
+                    "Ref": "VolumeType"
+                },
+                "io1"
+            ]
+        }
+    },
+    "Mappings": {
+        "AWSAMIRegionMap": {
+            "AMI": {
+                "GHE29": "GitLab CE 8.17.2"
+            },
+            "ap-northeast-1": {
+                "AMI": "ami-1b30677c"
+            },
+            "ap-northeast-2": {
+                "AMI": "ami-5544943b"
+            },
+            "ap-south-1": {
+                "AMI": "ami-f07f0f9f"
+            },
+            "ap-southeast-1": {
+                "AMI": "ami-34893957"
+            },
+            "ap-southeast-2": {
+                "AMI": "ami-eebbb88d"
+            },
+            "ca-central-1": {
+                "AMI": "ami-7e64d91a"
+            },
+            "eu-central-1": {
+                "AMI": "ami-8666b3e9"
+            },
+            "eu-west-1": {
+                "AMI": "ami-35c4ed53"
+            },
+            "eu-west-2": {
+                "AMI": "ami-49f1e42d"
+            },
+            "sa-east-1": {
+                "AMI": "ami-96c7a1fa"
+            },
+            "us-east-1": {
+                "AMI": "ami-2b31ea3d"
+            },
+            "us-east-2": {
+                "AMI": "ami-0a8bae6f"
+            },
+            "us-west-1": {
+                "AMI": "ami-35fda355"
+            },
+            "us-west-2": {
+                "AMI": "ami-ad860bcd"
+            }
+        }
+    },
+    "Outputs": {
+        "AvailabilityZone": {
+            "Description": "Availability Zone of the newly created EC2 instance",
+            "Value": {
+                "Fn::GetAtt": [
+                    "EC2Instance",
+                    "AvailabilityZone"
+                ]
+            }
+        },
+        "rGitSecurityGroup": {
+            "Value": {
+                "Ref": "rGitSecurityGroup"
+            }
+        },
+        "GitInstanceId": {
+            "Description": "InstanceId of the newly created EC2 instance",
+            "Value": {
+                "Ref": "EC2Instance"
+            }
+        },
+        "GitInstanceProfileId": {
+            "Description": "ID of the Instance Profile for Elastic Beanstalk",
+            "Value": {
+                "Ref": "EC2InstanceProfile"
+            }
+        },
+        "GitRoleId": {
+            "Description": "ID of the Role for Elastic Beanstalk",
+            "Value": {
+                "Ref": "EC2InstanceRole"
+            }
+        }
+    },
+    "Parameters": {
+        "AccessCIDR": {
+            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+            "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x.",
+            "Description": "The IP address range that can be used to access to the EC2 instance",
+            "MaxLength": "18",
+            "MinLength": "9",
+            "Type": "String"
+        },
+        "InstanceType": {
+            "AllowedValues": [
+                "m3.xlarge",
+                "m3.2xlarge",
+                "m4.xlarge",
+                "m4.2xlarge",
+                "c3.2xlarge",
+                "c3.4xlarge",
+                "c3.8xlarge",
+                "c4.large",
+                "c4.2xlarge",
+                "c4.4xlarge",
+                "c4.8xlarge",
+                "r3.large",
+                "r3.xlarge",
+                "r3.2xlarge",
+                "r3.4xlarge",
+                "r3.8xlarge"
+            ],
+            "ConstraintDescription": "must be a valid EC2 instance type for GitLab CE c4.large is recommended",
+            "Default": "c4.large",
+            "Description": "WebServer EC2 instance type",
+            "Type": "String"
+        },
+        "KeyPairName": {
+            "ConstraintDescription": "must be the name of an existing EC2 KeyPair.",
+            "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instance",
+            "Type": "AWS::EC2::KeyPair::KeyName"
+        },
+        "ProvisionedIops": {
+            "ConstraintDescription": "Range is 100 to 20000 for Provisioned IOPS SSD volumes",
+            "Default": "100",
+            "Description": "Set the provisioned IOPs between 100 and 20000. Only set if you are choosing io1 for your volume type",
+            "Type": "String"
+        },
+        "SubnetId": {
+            "Description": "The Public subnet where the GitLab CE instance will be launched",
+            "Type": "AWS::EC2::Subnet::Id"
+        },
+        "VPCID": {
+            "Description": "The VPC to launch the GitLab CE server",
+            "Type": "AWS::EC2::VPC::Id"
+        },
+        "VolumeSize": {
+            "Default": "100",
+            "Description": "The size of the EBS attached volume",
+            "Type": "String"
+        },
+        "VolumeType": {
+            "AllowedValues": [
+                "gp2",
+                "io1"
+            ],
+            "Description": "Choose either GP2 or IO1. IO1 is recommended for more than 500 users",
+            "Default": "gp2",
+            "Type": "String"
+        }
+    },
+    "Resources": {
+        "EC2Instance": {
+            "Metadata": {
+                "AWS::CloudFormation::Init": {},
+                "AWS::CloudFormation::Designer": {
+                    "id": "990cae06-9cfc-400a-b6bc-a788d7441ec5"
+                }
+            },
+            "Properties": {
+                "BlockDeviceMappings": [
+                    {
+                        "DeviceName": "/dev/xvdf",
+                        "Ebs": {
+                            "Encrypted": "true",
+                            "Iops": {
+                                "Fn::If": [
+                                    "Io1Set",
+                                    {
+                                        "Ref": "ProvisionedIops"
+                                    },
+                                    {
+                                        "Ref": "AWS::NoValue"
+                                    }
+                                ]
+                            },
+                            "VolumeSize": {
+                                "Ref": "VolumeSize"
+                            },
+                            "VolumeType": {
+                                "Ref": "VolumeType"
+                            }
+                        }
+                    }
+                ],
+                "EbsOptimized": "true",
+                "IamInstanceProfile": {
+                    "Ref": "EC2InstanceProfile"
+                },
+                "ImageId": {
+                    "Fn::FindInMap": [
+                        "AWSAMIRegionMap",
+                        {
+                            "Ref": "AWS::Region"
+                        },
+                        "AMI"
+                    ]
+                },
+                "InstanceType": {
+                    "Ref": "InstanceType"
+                },
+                "KeyName": {
+                    "Ref": "KeyPairName"
+                },
+                "SecurityGroupIds": [
+                    {
+                        "Ref": "rGitSecurityGroup"
+                    }
+                ],
+                "SubnetId": {
+                    "Ref": "SubnetId"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "GitLab CE"
+                    }
+                ],
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "",
+                            [
+                                "#!/bin/bash -x\n",								
+                                "gitlab-ctl reconfigure\n",
+								"sleep 1m\n",
+                                "apt-get install -y ruby\n",
+								"apt-get install -y jq\n",
+                                "gem install gitlab\n",  
+								"#Install the packages.  The wait is to prevent a stall after reconfigure\n",									
+                                "gitlab-rails runner 'User.create!(username: \"Admin\", email: \"test2@example.com\", password: \"AdminPassword\", password_confirmation: \"AdminPassword\", name: \"Admin\", admin: true)'\n",
+                                "gitlab-rails runner 'User.create!(username: \"TAC\", email: \"test@example.com\", password: \"TACPassword\", password_confirmation: \"TACPassword\", name: \"TACUser\")'\n",                     
+								"# Makes accounts.  usernames/passwords can be parameterized for final version\n",
+								"# This next section puts the ip in as the first variable and the access token as the second\n",
+								"ipvar=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)\n",
+                                "xvar=$(curl http://",
+                                "$ipvar",
+                                "/api/v3/session --data 'login=Admin&password=AdminPassword' | jq --raw-output .private_token)\n",
+								"# Creates project, clones it to local file, populates it with demo and pushes it\n",
+                                "curl --header \"PRIVATE-TOKEN: $xvar\" -X POST \"http://",
+								"$ipvar",
+								"/api/v3/projects?name=oodlejobs\"\n",
+                                "git clone http://Admin:AdminPassword@",
+                                "$ipvar",
+                                "/Admin/oodlejobs.git\n",
+                                "cd oodlejobs\n",
+                                "wget https://github.com/EdwardOst/datasource.quickstart.talend/blob/52a325676bf9ce7251b6538d504869c3e2cceefd/templates/gitlabcecft.template\n",
+                                "git add .\n",
+                                "git commit -m \"First Jobs\"\n",
+                                "git push http://Admin:AdminPassword@",
+                                "$ipvar",
+                                "/Admin/oodlejobs.git\n",
+                                "\n"
+                            ]
+                        ]
+                    }
+                }
+            },
+            "Type": "AWS::EC2::Instance"
+        },
+        "EC2InstanceProfile": {
+            "Properties": {
+                "Path": "/",
+                "Roles": [
+                    {
+                        "Ref": "EC2InstanceRole"
+                    }
+                ]
+            },
+            "Type": "AWS::IAM::InstanceProfile",
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "025b9340-13da-4f8d-91aa-f71e191e3477"
+                }
+            }
+        },
+        "EC2InstanceRole": {
+            "Properties": {
+                "AssumeRolePolicyDocument": {
+                    "Statement": [
+                        {
+                            "Action": [
+                                "sts:AssumeRole"
+                            ],
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": [
+                                    "ec2.amazonaws.com"
+                                ]
+                            }
+                        }
+                    ],
+                    "Version": "2012-10-17"
+                },
+                "ManagedPolicyArns": [
+                    "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
+                ],
+                "Path": "/"
+            },
+            "Type": "AWS::IAM::Role",
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "8837c0a7-bb9a-4f6c-ab02-c5a72f27b02e"
+                }
+            }
+        },
+        "rGitSecurityGroup": {
+            "Properties": {
+                "GroupDescription": "Ports needed for GitLab CE",
+                "SecurityGroupIngress": [
+                    {
+                        "CidrIp": {
+                            "Ref": "AccessCIDR"
+                        },
+                        "FromPort": "22",
+                        "IpProtocol": "tcp",
+                        "ToPort": "22"
+                    },
+                    {
+                        "CidrIp": {
+                            "Ref": "AccessCIDR"
+                        },
+                        "FromPort": "8080",
+                        "IpProtocol": "tcp",
+                        "ToPort": "8080"
+                    },
+                    {
+                        "CidrIp": {
+                            "Ref": "AccessCIDR"
+                        },
+                        "FromPort": "122",
+                        "IpProtocol": "tcp",
+                        "ToPort": "122"
+                    },
+                    {
+                        "CidrIp": {
+                            "Ref": "AccessCIDR"
+                        },
+                        "FromPort": "1194",
+                        "IpProtocol": "udp",
+                        "ToPort": "1194"
+                    },
+                    {
+                        "CidrIp": {
+                            "Ref": "AccessCIDR"
+                        },
+                        "FromPort": "161",
+                        "IpProtocol": "udp",
+                        "ToPort": "161"
+                    },
+                    {
+                        "CidrIp": {
+                            "Ref": "AccessCIDR"
+                        },
+                        "FromPort": "443",
+                        "IpProtocol": "tcp",
+                        "ToPort": "443"
+                    },
+                    {
+                        "CidrIp": {
+                            "Ref": "AccessCIDR"
+                        },
+                        "FromPort": "80",
+                        "IpProtocol": "tcp",
+                        "ToPort": "80"
+                    },
+                    {
+                        "CidrIp": {
+                            "Ref": "AccessCIDR"
+                        },
+                        "FromPort": "9418",
+                        "IpProtocol": "tcp",
+                        "ToPort": "9418"
+                    },
+                    {
+                        "CidrIp": {
+                            "Ref": "AccessCIDR"
+                        },
+                        "FromPort": "25",
+                        "IpProtocol": "tcp",
+                        "ToPort": "25"
+                    },
+                    {
+                        "CidrIp": {
+                            "Ref": "AccessCIDR"
+                        },
+                        "FromPort": "8443",
+                        "IpProtocol": "tcp",
+                        "ToPort": "8443"
+                    }
+                ],
+                "VpcId": {
+                    "Ref": "VPCID"
+                }
+            },
+            "Type": "AWS::EC2::SecurityGroup",
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "17633600-2812-4565-9f9d-1f06f35b86ff"
+                }
+            }
+        }
+    }
+}

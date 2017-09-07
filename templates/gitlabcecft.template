@@ -15,9 +15,6 @@
                         "VPCID"
                     ]
                 },
-                
-                
-                
                 {
                     "Label": {
                         "default": "Server Configuration"
@@ -59,8 +56,6 @@
                 "VPCCIDR": {
                     "default": "VPC CIDR"
                 },
-              
-                
                 "VolumeType": {
                     "default": "Volume Type"
                 },
@@ -80,102 +75,118 @@
                     "default": "VPC ID"
                 }
             }
-        },
-        "AWS::CloudFormation::Designer": {
-            "17633600-2812-4565-9f9d-1f06f35b86ff": {
-                "size": {
-                    "width": 60,
-                    "height": 60
-                },
-                "position": {
-                    "x": 180,
-                    "y": 90
-                },
-                "z": 1,
-                "embeds": []
-            },
-            "8837c0a7-bb9a-4f6c-ab02-c5a72f27b02e": {
-                "size": {
-                    "width": 60,
-                    "height": 60
-                },
-                "position": {
-                    "x": 60,
-                    "y": 210
-                },
-                "z": 1,
-                "embeds": []
-            },
-            "025b9340-13da-4f8d-91aa-f71e191e3477": {
-                "size": {
-                    "width": 60,
-                    "height": 60
-                },
-                "position": {
-                    "x": 180,
-                    "y": 210
-                },
-                "z": 1,
-                "embeds": [],
-                "isassociatedwith": [
-                    "8837c0a7-bb9a-4f6c-ab02-c5a72f27b02e"
-                ]
-            },
-            "990cae06-9cfc-400a-b6bc-a788d7441ec5": {
-                "size": {
-                    "width": 60,
-                    "height": 60
-                },
-                "position": {
-                    "x": 300,
-                    "y": 90
-                },
-                "z": 1,
-                "embeds": [],
-                "isassociatedwith": [
-                    "17633600-2812-4565-9f9d-1f06f35b86ff"
-                ],
-                "isrelatedto": [
-                    "025b9340-13da-4f8d-91aa-f71e191e3477",
-                    "550b18ae-06ce-4d3b-b032-6b2affe7c18f"
-                ]
-            },
-            "1b461d29-d4aa-4cd1-9e9d-055d21edea64": {
-                "size": {
-                    "width": 60,
-                    "height": 60
-                },
-                "position": {
-                    "x": 300,
-                    "y": 310
-                },
-                "z": 1,
-                "embeds": [],
-                "isassociatedwith": [
-                    "990cae06-9cfc-400a-b6bc-a788d7441ec5"
-                ]
-            }
         }
     },
-    "Conditions": {
-        "GovCloudCondition": {
-            "Fn::Equals": [
-                {
-                    "Ref": "AWS::Region"
-                },
-                "us-gov-west-1"
-            ]
+    "Parameters": {
+        "AccessCIDR": {
+            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+            "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x.",
+            "Description": "The IP address range that can be used to access to the EC2 instance",
+            "MaxLength": "18",
+            "MinLength": "9",
+            "Type": "String"
         },
-        "Io1Set": {
-            "Fn::Equals": [
-                {
-                    "Ref": "VolumeType"
-                },
+        "InstanceType": {
+            "AllowedValues": [
+                "m3.xlarge",
+                "m3.2xlarge",
+                "m4.xlarge",
+                "m4.2xlarge",
+                "c3.2xlarge",
+                "c3.4xlarge",
+                "c3.8xlarge",
+                "c4.large",
+                "c4.2xlarge",
+                "c4.4xlarge",
+                "c4.8xlarge",
+                "r3.large",
+                "r3.xlarge",
+                "r3.2xlarge",
+                "r3.4xlarge",
+                "r3.8xlarge"
+            ],
+            "ConstraintDescription": "must be a valid EC2 instance type for GitLab CE c4.large is recommended",
+            "Default": "c4.large",
+            "Description": "WebServer EC2 instance type",
+            "Type": "String"
+        },
+        "KeyPairName": {
+            "ConstraintDescription": "must be the name of an existing EC2 KeyPair.",
+            "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instance",
+            "Type": "AWS::EC2::KeyPair::KeyName"
+        },
+        "ProvisionedIops": {
+            "ConstraintDescription": "Range is 100 to 20000 for Provisioned IOPS SSD volumes",
+            "Default": "100",
+            "Description": "Set the provisioned IOPs between 100 and 20000. Only set if you are choosing io1 for your volume type",
+            "Type": "String"
+        },
+        "SubnetId": {
+            "Description": "The Public subnet where the GitLab CE instance will be launched",
+            "Type": "AWS::EC2::Subnet::Id"
+        },
+        "VPCID": {
+            "Description": "The VPC to launch the GitLab CE server",
+            "Type": "AWS::EC2::VPC::Id"
+        },
+        "VolumeSize": {
+            "Default": "100",
+            "Description": "The size of the EBS attached volume",
+            "Type": "String"
+        },
+        "VolumeType": {
+            "AllowedValues": [
+                "gp2",
                 "io1"
-            ]
+            ],
+            "Description": "Choose either GP2 or IO1. IO1 is recommended for more than 500 users",
+            "Default": "gp2",
+            "Type": "String"
+        },
+        "GitAdminUserid": {
+            "Description": "Git admin userid.",
+            "Type": "String",
+            "Default": "Admin"
+        },
+        "GitAdminPassword": {
+            "Description": "Git admin password.",
+            "Type": "String",
+            "Default": "AdminPassword",
+            "NoEcho": "true"
+        },
+        "GitAdminEmail": {
+            "Description": "Git admin contact email.",
+            "Type": "String",
+            "Default": ""
+        },
+        "GitTacUserid": {
+            "Description": "Git TAC userid.",
+            "Type": "String",
+            "Default": "TAC"
+        },
+        "GitTacPassword": {
+            "Description": "Git TAC password.",
+            "Type": "String",
+            "Default": "TACPassword",
+            "NoEcho": "true"
+        },
+        "GitTacEmail": {
+            "Description": "TAC contact email.",
+            "Type": "String",
+            "Default": ""
+        },
+        "GitRepo": {
+            "Description": "Initial Git repository.",
+            "Type": "String",
+            "Default": "oodlejobs"
         }
     },
     "Mappings": {
+        "Talend": {
+            "gitlab": {
+                "init": "https://s3.amazonaws.com/baseline.quickstart.talend/bootstrap/git/gitlab-init.sh"
+            }
+        },
         "AWSAMIRegionMap": {
             "AMI": {
                 "GHE29": "GitLab CE 8.17.2"
@@ -224,187 +235,27 @@
             }
         }
     },
-    "Outputs": {
-        "AvailabilityZone": {
-            "Description": "Availability Zone of the newly created EC2 instance",
-            "Value": {
-                "Fn::GetAtt": [
-                    "EC2Instance",
-                    "AvailabilityZone"
-                ]
-            }
+    "Conditions": {
+        "GovCloudCondition": {
+            "Fn::Equals": [
+                {
+                    "Ref": "AWS::Region"
+                },
+                "us-gov-west-1"
+            ]
         },
-		"rGitSecurityGroup": {
-            "Value": {
-                "Ref": "rGitSecurityGroup"
-            }
-        },
-        "GitInstanceId": {
-            "Description": "InstanceId of the newly created EC2 instance",
-            "Value": {
-                "Ref": "EC2Instance"
-            }
-        },
-        "GitInstanceProfileId": {
-            "Description": "ID of the Instance Profile for Elastic Beanstalk",
-            "Value": {
-                "Ref": "EC2InstanceProfile"
-            }
-        },
-        "GitRoleId": {
-            "Description": "ID of the Role for Elastic Beanstalk",
-            "Value": {
-                "Ref": "EC2InstanceRole"
-            }
-        }
-    },
-    "Parameters": {
-        "AccessCIDR": {
-            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
-            "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x.",
-            "Description": "The IP address range that can be used to access to the EC2 instance",
-            "MaxLength": "18",
-            "MinLength": "9",
-            "Type": "String"
-        },
-      
-      
-        "InstanceType": {
-            "AllowedValues": [
-                "m3.xlarge",
-                "m3.2xlarge",
-                "m4.xlarge",
-                "m4.2xlarge",
-                "c3.2xlarge",
-                "c3.4xlarge",
-                "c3.8xlarge",
-				"c4.large",
-                "c4.2xlarge",
-                "c4.4xlarge",
-                "c4.8xlarge",
-                "r3.large",
-                "r3.xlarge",
-                "r3.2xlarge",
-                "r3.4xlarge",
-                "r3.8xlarge"
-            ],
-            "ConstraintDescription": "must be a valid EC2 instance type for GitLab CE c4.large is recommended",
-            "Default": "c4.large",
-            "Description": "WebServer EC2 instance type",
-            "Type": "String"
-        },
-        "KeyPairName": {
-            "ConstraintDescription": "must be the name of an existing EC2 KeyPair.",
-            "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instance",
-            "Type": "AWS::EC2::KeyPair::KeyName"
-        },
-   
-
-        "ProvisionedIops": {
-            "ConstraintDescription": "Range is 100 to 20000 for Provisioned IOPS SSD volumes",
-			"Default": "100",
-            "Description": "Set the provisioned IOPs between 100 and 20000. Only set if you are choosing io1 for your volume type",
-            "Type": "String"
-        },
-       
-        
-        
-        "SubnetId": {
-            "Description": "The Public subnet where the GitLab CE instance will be launched",
-            "Type": "AWS::EC2::Subnet::Id"
-        },
-        "VPCID": {
-            "Description": "The VPC to launch the GitLab CE server",
-            "Type": "AWS::EC2::VPC::Id"
-        },
-        "VolumeSize": {
-            "Default": "100",
-            "Description": "The size of the EBS attached volume",
-            "Type": "String"
-        },
-        "VolumeType": {
-            "AllowedValues": [
-                "gp2",
+        "Io1Set": {
+            "Fn::Equals": [
+                {
+                    "Ref": "VolumeType"
+                },
                 "io1"
-            ],
-            "Description": "Choose either GP2 or IO1. IO1 is recommended for more than 500 users",
-            "Default": "gp2",
-            "Type": "String"
+            ]
         }
     },
     "Resources": {
-        "EC2Instance": {
-            "Metadata": {
-                "AWS::CloudFormation::Init": {
-                    
-                },
-                "AWS::CloudFormation::Designer": {
-                    "id": "990cae06-9cfc-400a-b6bc-a788d7441ec5"
-                }
-            },
-            "Properties": {
-                "BlockDeviceMappings": [
-                    {
-                        "DeviceName": "/dev/xvdf",
-                        "Ebs": {
-                            "Encrypted": "true",
-                            "Iops": {
-                                "Fn::If": [
-                                    "Io1Set",
-                                    {
-                                        "Ref": "ProvisionedIops"
-                                    },
-                                    {
-                                        "Ref": "AWS::NoValue"
-                                    }
-                                ]
-                            },
-                            "VolumeSize": {
-                                "Ref": "VolumeSize"
-                            },
-                            "VolumeType": {
-                                "Ref": "VolumeType"
-                            }
-                        }
-                    }
-                ],
-                "EbsOptimized": "true",
-                "IamInstanceProfile": {
-                    "Ref": "EC2InstanceProfile"
-                },
-                "ImageId": {
-                    "Fn::FindInMap": [
-                        "AWSAMIRegionMap",
-                        {
-                            "Ref": "AWS::Region"
-                        },
-                        "AMI"
-                    ]
-                },
-                "InstanceType": {
-                    "Ref": "InstanceType"
-                },
-                "KeyName": {
-                    "Ref": "KeyPairName"
-                },
-                "SecurityGroupIds": [
-                    {
-                        "Ref": "rGitSecurityGroup"
-                    }
-                ],
-                "SubnetId": {
-                    "Ref": "SubnetId"
-                },
-                "Tags": [
-                    {
-                        "Key": "Name",
-                        "Value": "GitLab CE"
-                    }
-                ]
-            },
-            "Type": "AWS::EC2::Instance"
-        },
         "EC2InstanceProfile": {
+            "Type": "AWS::IAM::InstanceProfile",
             "Properties": {
                 "Path": "/",
                 "Roles": [
@@ -412,15 +263,10 @@
                         "Ref": "EC2InstanceRole"
                     }
                 ]
-            },
-            "Type": "AWS::IAM::InstanceProfile",
-            "Metadata": {
-                "AWS::CloudFormation::Designer": {
-                    "id": "025b9340-13da-4f8d-91aa-f71e191e3477"
-                }
             }
         },
         "EC2InstanceRole": {
+            "Type": "AWS::IAM::Role",
             "Properties": {
                 "AssumeRolePolicyDocument": {
                     "Statement": [
@@ -442,15 +288,8 @@
                     "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
                 ],
                 "Path": "/"
-            },
-            "Type": "AWS::IAM::Role",
-            "Metadata": {
-                "AWS::CloudFormation::Designer": {
-                    "id": "8837c0a7-bb9a-4f6c-ab02-c5a72f27b02e"
-                }
             }
         },
-        
         "rGitSecurityGroup": {
             "Properties": {
                 "GroupDescription": "Ports needed for GitLab CE",
@@ -545,6 +384,218 @@
                 "AWS::CloudFormation::Designer": {
                     "id": "17633600-2812-4565-9f9d-1f06f35b86ff"
                 }
+            }
+        },
+        "EC2Instance": {
+            "Type": "AWS::EC2::Instance",
+            "Properties": {
+                "BlockDeviceMappings": [
+                    {
+                        "DeviceName": "/dev/xvdf",
+                        "Ebs": {
+                            "Encrypted": "true",
+                            "Iops": {
+                                "Fn::If": [
+                                    "Io1Set",
+                                    {
+                                        "Ref": "ProvisionedIops"
+                                    },
+                                    {
+                                        "Ref": "AWS::NoValue"
+                                    }
+                                ]
+                            },
+                            "VolumeSize": {
+                                "Ref": "VolumeSize"
+                            },
+                            "VolumeType": {
+                                "Ref": "VolumeType"
+                            }
+                        }
+                    }
+                ],
+                "EbsOptimized": "true",
+                "IamInstanceProfile": {
+                    "Ref": "EC2InstanceProfile"
+                },
+                "ImageId": {
+                    "Fn::FindInMap": [
+                        "AWSAMIRegionMap",
+                        {
+                            "Ref": "AWS::Region"
+                        },
+                        "AMI"
+                    ]
+                },
+                "InstanceType": {
+                    "Ref": "InstanceType"
+                },
+                "KeyName": {
+                    "Ref": "KeyPairName"
+                },
+                "SecurityGroupIds": [
+                    {
+                        "Ref": "rGitSecurityGroup"
+                    }
+                ],
+                "SubnetId": {
+                    "Ref": "SubnetId"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "GitLab CE"
+                    }
+                ],
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "",
+                            [
+                                "#!/bin/bash -xe\n",
+                                "apt-get install -y aws-cfn-bootstrap\n",
+								"#fix ec2 hostname resolution\n",
+                                "wget https://s3.amazonaws.com/baseline.quickstart.talend/bootstrap/ec2-metadata\n",
+								"chmod +x ec2-metadata\n",
+                                "wget https://s3.amazonaws.com/baseline.quickstart.talend/bootstrap/update_hosts.sh\n",
+								"chmod +x update_hosts.sh\n",
+                                "./update_hosts.sh\n",
+                                "# Install the files and packages from the metadata\n",
+                                "/opt/aws/bin/cfn-init -v ",
+                                "         --stack ",
+                                {
+                                    "Ref": "AWS::StackName"
+                                },
+                                "         --resource TalendServerInstance ",
+                                "         --configsets All ",
+                                "         --region ",
+                                {
+                                    "Ref": "AWS::Region"
+                                },
+                                "\n",
+                                "/opt/aws/bin/cfn-signal -e $? ",
+                                "         --stack ",
+                                {
+                                    "Ref": "AWS::StackName"
+                                },
+                                "         --resource TalendServerInstance ",
+                                "         --region ",
+                                {
+                                    "Ref": "AWS::Region"
+                                },
+                                "\n"
+                            ]
+                        ]
+                    }
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Init": {
+                    "configSets": {
+                        "All": [
+                            "Prepare",
+                            "Download",
+                            "Configure",
+                            "Install"
+                        ]
+                    },
+                    "Prepare": {
+                        "commands": {
+                            "00-gitlab-reconfigure": {
+                                "command": "gitlab-ctl reconfigure"
+                            },
+                            "01-install-ruby": {
+                                "command": "apt-get install -y ruby"
+                            },
+                            "02-install-jq": {
+                                "command": "apt-get install -y jq"
+                            },
+                            "03-install-gitlab": {
+                                "command": "gem install gitlab"
+                            }
+                        }
+                    },
+                    "Download": {
+                        "files": {
+                            "/home/ec2-user/gitlab-init.sh": {
+                                "source": {
+                                    "Fn::FindInMap": [
+                                        "Talend",
+                                        "gitlab",
+                                        "init"
+                                    ]
+                                },
+                                "owner": "ec2-user",
+                                "group": "ec2-user",
+                                "mode": "000500"
+                            }
+                        }
+                    },
+                    "Configure": {
+                        "files": {
+                            "/home/ec2-user/gitlab-init.conf": {
+                                "content": {
+                                    "Fn::Join": [
+                                        "\n",
+                                        [
+                                        { "Fn::Sub": "git_admin_userid=${GitAdminUserid}" },
+                                        { "Fn::Sub": "git_admin_password=${GitAdminPassword}" },
+                                        { "Fn::Sub": "git_admin_email=${GitAdminEmail}" },
+                                        { "Fn::Sub": "git_tac_userid=${GitTacUserid}" },
+                                        { "Fn::Sub": "git_tac_password=${GitTacPassword}" },
+                                        { "Fn::Sub": "git_tac_email=${GitTacEmail}" },
+                                        { "Fn::Sub": "git_repo=${GitRepo}" }
+                                        ]
+                                    ]
+                                },
+                                "owner": "root",
+                                "group": "root",
+                                "mode": "000400"
+                            }
+                        }
+                    },
+                    "Install": {
+                        "commands": {
+                            "01-install-gitlab": {
+                                "command": "/home/ec2-user/gitlab-init.sh"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "Outputs": {
+        "AvailabilityZone": {
+            "Description": "Availability Zone of the newly created EC2 instance",
+            "Value": {
+                "Fn::GetAtt": [
+                    "EC2Instance",
+                    "AvailabilityZone"
+                ]
+            }
+        },
+        "rGitSecurityGroup": {
+            "Value": {
+                "Ref": "rGitSecurityGroup"
+            }
+        },
+        "GitInstanceId": {
+            "Description": "Git server EC2 Instance ID.",
+            "Value": {
+                "Ref": "EC2Instance"
+            }
+        },
+        "GitInstanceProfileId": {
+            "Description": "Git server EC2 Instance Profile.",
+            "Value": {
+                "Ref": "EC2InstanceProfile"
+            }
+        },
+        "GitRoleId": {
+            "Description": "Git server EC2 Instance Role.",
+            "Value": {
+                "Ref": "EC2InstanceRole"
             }
         }
     }
