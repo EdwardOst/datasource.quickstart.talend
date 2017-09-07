@@ -517,7 +517,7 @@
                     },
                     "Download": {
                         "files": {
-                            "/home/ec2-user/gitlab-init.sh": {
+                            "/home/ubuntu/gitlab-init.sh": {
                                 "source": {
                                     "Fn::FindInMap": [
                                         "Talend",
@@ -525,26 +525,26 @@
                                         "init"
                                     ]
                                 },
-                                "owner": "ec2-user",
-                                "group": "ec2-user",
+                                "owner": "ubuntu",
+                                "group": "ubuntu",
                                 "mode": "000500"
                             }
                         }
                     },
                     "Configure": {
                         "files": {
-                            "/home/ec2-user/gitlab-init.conf": {
+                            "/home/ubuntu/gitlab-init.conf": {
                                 "content": {
                                     "Fn::Join": [
                                         "\n",
                                         [
-                                        { "Fn::Sub": "git_admin_userid=${GitAdminUserid}" },
-                                        { "Fn::Sub": "git_admin_password=${GitAdminPassword}" },
-                                        { "Fn::Sub": "git_admin_email=${GitAdminEmail}" },
-                                        { "Fn::Sub": "git_tac_userid=${GitTacUserid}" },
-                                        { "Fn::Sub": "git_tac_password=${GitTacPassword}" },
-                                        { "Fn::Sub": "git_tac_email=${GitTacEmail}" },
-                                        { "Fn::Sub": "git_repo=${GitRepo}" }
+                                            { "Fn::Sub": "git_admin_userid=${GitAdminUserid}" },
+                                            { "Fn::Sub": "git_admin_password=${GitAdminPassword}" },
+                                            { "Fn::Sub": "git_admin_email=${GitAdminEmail}" },
+                                            { "Fn::Sub": "git_tac_userid=${GitTacUserid}" },
+                                            { "Fn::Sub": "git_tac_password=${GitTacPassword}" },
+                                            { "Fn::Sub": "git_tac_email=${GitTacEmail}" },
+                                            { "Fn::Sub": "git_repo=${GitRepo}" }
                                         ]
                                     ]
                                 },
@@ -557,7 +557,7 @@
                     "Install": {
                         "commands": {
                             "01-install-gitlab": {
-                                "command": "/home/ec2-user/gitlab-init.sh"
+                                "command": "source /home/ubuntu/gitlab-init.conf; /home/ubuntu/gitlab-init.sh"
                             }
                         }
                     }
