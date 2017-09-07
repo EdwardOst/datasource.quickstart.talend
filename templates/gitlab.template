@@ -556,9 +556,8 @@
                                     "Fn::Join": [
                                         "\n",
                                         [
-                                            "#!/usr/bin/env bash", "",
-                                            "set -e",
-                                            "set -u", "",
+                                            "#!/bin/bash",
+                                            "",
                                             "function gitlab_conf() { ",
                                             { "Fn::Sub": "    local git_admin_userid=\"${GitAdminUserid}\"" },
                                             { "Fn::Sub": "    local git_admin_password=\"${GitAdminPassword}\"" },
@@ -569,7 +568,8 @@
                                             { "Fn::Sub": "    local git_repo=\"${GitRepo}\"" },
                                             { "Fn::Sub": "    local source_url=\"${GitSourceUrl}\"" },
                                             "\"${@}\"",
-                                            "}"
+                                            "}",
+                                            ""
                                         ]
                                     ]
                                 },
@@ -582,7 +582,7 @@
                     "Install": {
                         "commands": {
                             "01-install-gitlab": {
-                                "command": "echo ${SHELL}; . /home/ubuntu/gitlab-config.sh; . /home/ubuntu/talend-gitlab.sh; gitlab_conf gitlab_init; "
+                                "command": "/bin/bash -c \". /home/ubuntu/gitlab-config.sh; . /home/ubuntu/talend-gitlab.sh; gitlab_conf gitlab_init;\""
                             }
                         }
                     }
