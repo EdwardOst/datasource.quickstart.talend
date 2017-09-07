@@ -582,7 +582,7 @@
                     "Install": {
                         "commands": {
                             "01-install-gitlab": {
-                                "command": ". /home/ubuntu/gitlab-config.sh; . /home/ubuntu/talend-gitlab.sh; gitlab_conf gitlab_init"
+                                "command": "echo ${SHELL}; . /home/ubuntu/gitlab-config.sh; . /home/ubuntu/talend-gitlab.sh; gitlab_conf gitlab_init; "
                             }
                         }
                     }
