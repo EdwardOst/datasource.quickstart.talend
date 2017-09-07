@@ -473,7 +473,6 @@
                             "",
                             [
                                 "#!/bin/bash -xe\n",
-                                "sleep 30\n",
                                 "echo \"pwd: $(pwd)\" 1>&2\n",
                                 "echo \"whoami: $(whoami)\" 1>&2\n",
                                 "while ! apt-get update -q ; do sleep 10; done\n",
