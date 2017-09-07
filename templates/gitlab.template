@@ -179,12 +179,17 @@
             "Description": "Initial Git repository.",
             "Type": "String",
             "Default": "oodlejobs"
+        },
+        "GitSourceUrl": {
+            "Description": "Git repo content.",
+            "Type": "String",
+            "Default": "https://raw.githubusercontent.com/EdwardOst/bash-util/master/util.sh"
         }
     },
     "Mappings": {
         "Talend": {
-            "gitlab": {
-                "init": "https://s3.amazonaws.com/baseline.quickstart.talend/bootstrap/git/gitlab-init.sh"
+            "git": {
+                "init": "https://s3.amazonaws.com/baseline.quickstart.talend/bootstrap/git/talend-gitlab.sh"
             }
         },
         "AWSAMIRegionMap": {
@@ -517,11 +522,11 @@
                     },
                     "Download": {
                         "files": {
-                            "/home/ubuntu/gitlab-init.sh": {
+                            "/home/ubuntu/talend-gitlab.sh": {
                                 "source": {
                                     "Fn::FindInMap": [
                                         "Talend",
-                                        "gitlab",
+                                        "git",
                                         "init"
                                     ]
                                 },
@@ -533,18 +538,24 @@
                     },
                     "Configure": {
                         "files": {
-                            "/home/ubuntu/gitlab-init.conf": {
+                            "/home/ubuntu/gitlab-config.sh": {
                                 "content": {
                                     "Fn::Join": [
                                         "\n",
                                         [
-                                            { "Fn::Sub": "git_admin_userid=${GitAdminUserid}" },
-                                            { "Fn::Sub": "git_admin_password=${GitAdminPassword}" },
-                                            { "Fn::Sub": "git_admin_email=${GitAdminEmail}" },
-                                            { "Fn::Sub": "git_tac_userid=${GitTacUserid}" },
-                                            { "Fn::Sub": "git_tac_password=${GitTacPassword}" },
-                                            { "Fn::Sub": "git_tac_email=${GitTacEmail}" },
-                                            { "Fn::Sub": "git_repo=${GitRepo}" }
+                                            "#!/bin/bash -eu"
+                                            "",
+                                            function gitlab_conf() { ",
+                                            { "Fn::Sub": "    local git_admin_userid=${GitAdminUserid}" },
+                                            { "Fn::Sub": "    local git_admin_password=${GitAdminPassword}" },
+                                            { "Fn::Sub": "    local git_admin_email=${GitAdminEmail}" },
+                                            { "Fn::Sub": "    local git_tac_userid=${GitTacUserid}" },
+                                            { "Fn::Sub": "    local git_tac_password=${GitTacPassword}" },
+                                            { "Fn::Sub": "    local git_tac_email=${GitTacEmail}" },
+                                            { "Fn::Sub": "    local git_repo=${GitRepo}" },
+                                            { "Fn::Sub": "    local source_url=${GitSourceUrl}" },
+                                            "\"${@}\"",
+                                            "}"
                                         ]
                                     ]
                                 },
@@ -557,7 +568,7 @@
                     "Install": {
                         "commands": {
                             "01-install-gitlab": {
-                                "command": "source /home/ubuntu/gitlab-init.conf; /home/ubuntu/gitlab-init.sh"
+                                "command": "source /home/ubuntu/gitlab-config.sh; source /home/ubuntu/talend-gitlab.sh; gitlab_conf gitlab_init"
                             }
                         }
                     }
