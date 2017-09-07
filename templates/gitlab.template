@@ -125,6 +125,12 @@
             "Description": "The Public subnet where the GitLab CE instance will be launched",
             "Type": "AWS::EC2::Subnet::Id"
         },
+		"privateSubnet": {
+            "Description": "Is this is a private subnet.",
+            "Type": "String",
+			"Default": "private",
+            "AllowedValues": [ "private", "public" ]
+		},
         "VPCID": {
             "Description": "The VPC to launch the GitLab CE server",
             "Type": "AWS::EC2::VPC::Id"
@@ -241,6 +247,15 @@
         }
     },
     "Conditions": {
+        "isPrivateSubnet": {
+            "Fn::Equals": [
+                { "Ref": "privateSubnet" },
+                "private"
+            ]
+        },
+		"isPublicSubnet": {
+			"Fn::Not": [ { "Condition": "isPrivateSubnet" } ]
+		},
         "GovCloudCondition": {
             "Fn::Equals": [
                 {
@@ -259,18 +274,18 @@
         }
     },
     "Resources": {
-        "EC2InstanceProfile": {
+        "GitInstanceProfile": {
             "Type": "AWS::IAM::InstanceProfile",
             "Properties": {
                 "Path": "/",
                 "Roles": [
                     {
-                        "Ref": "EC2InstanceRole"
+                        "Ref": "GitInstanceRole"
                     }
                 ]
             }
         },
-        "EC2InstanceRole": {
+        "GitInstanceRole": {
             "Type": "AWS::IAM::Role",
             "Properties": {
                 "AssumeRolePolicyDocument": {
@@ -295,7 +310,7 @@
                 "Path": "/"
             }
         },
-        "rGitSecurityGroup": {
+        "GitSecurityGroup": {
             "Properties": {
                 "GroupDescription": "Ports needed for GitLab CE",
                 "SecurityGroupIngress": [
@@ -391,7 +406,7 @@
                 }
             }
         },
-        "EC2Instance": {
+        "GitInstance": {
             "Type": "AWS::EC2::Instance",
             "Properties": {
                 "BlockDeviceMappings": [
@@ -421,7 +436,7 @@
                 ],
                 "EbsOptimized": "true",
                 "IamInstanceProfile": {
-                    "Ref": "EC2InstanceProfile"
+                    "Ref": "GitInstanceProfile"
                 },
                 "ImageId": {
                     "Fn::FindInMap": [
@@ -440,7 +455,7 @@
                 },
                 "SecurityGroupIds": [
                     {
-                        "Ref": "rGitSecurityGroup"
+                        "Ref": "GitSecurityGroup"
                     }
                 ],
                 "SubnetId": {
@@ -462,7 +477,7 @@
                                 "echo \"pwd: $(pwd)\" 1>&2\n",
                                 "echo \"whoami: $(whoami)\" 1>&2\n",
                                 "while ! apt-get update -q ; do sleep 10; done\n",
-                                "apt-get -y install python-setuptools\n",
+                                "while ! apt-get -y install python-setuptools; do sleep 10; done\n",
                                 "easy_install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz\n",
                                 "# Install the files and packages from the metadata\n",
                                 "cfn-init -v ",
@@ -470,7 +485,7 @@
                                 {
                                     "Ref": "AWS::StackName"
                                 },
-                                "         --resource EC2Instance ",
+                                "         --resource GitInstance ",
                                 "         --configsets All ",
                                 "         --region ",
                                 {
@@ -482,7 +497,7 @@
                                 {
                                     "Ref": "AWS::StackName"
                                 },
-                                "         --resource EC2Instance ",
+                                "         --resource GitInstance ",
                                 "         --region ",
                                 {
                                     "Ref": "AWS::Region"
@@ -509,13 +524,13 @@
                                 "command": "gitlab-ctl reconfigure"
                             },
                             "01-install-ruby": {
-                                "command": "apt-get install -y ruby"
+                                "command": "while ! apt-get install -y ruby ; do sleep 10; done"
                             },
                             "02-install-jq": {
-                                "command": "apt-get install -y jq"
+                                "command": "while ! apt-get install -y jq ; do sleep 10; done"
                             },
                             "03-install-gitlab": {
-                                "command": "gem install gitlab"
+                                "command": "while ! gem install gitlab ; do sleep 10; done"
                             }
                         }
                     },
@@ -581,33 +596,74 @@
             "Description": "Availability Zone of the newly created EC2 instance",
             "Value": {
                 "Fn::GetAtt": [
-                    "EC2Instance",
+                    "GitInstance",
                     "AvailabilityZone"
                 ]
             }
         },
-        "rGitSecurityGroup": {
+        "GitSecurityGroup": {
             "Value": {
-                "Ref": "rGitSecurityGroup"
-            }
-        },
-        "GitInstanceId": {
-            "Description": "Git server EC2 Instance ID.",
-            "Value": {
-                "Ref": "EC2Instance"
+                "Ref": "GitSecurityGroup"
             }
         },
         "GitInstanceProfileId": {
             "Description": "Git server EC2 Instance Profile.",
             "Value": {
-                "Ref": "EC2InstanceProfile"
+                "Ref": "GitInstanceProfile"
             }
         },
         "GitRoleId": {
             "Description": "Git server EC2 Instance Role.",
             "Value": {
-                "Ref": "EC2InstanceRole"
+                "Ref": "GitInstanceRole"
             }
+        },
+        "ServerInstanceId": {
+            "Value": { "Ref": "GitInstance" },
+            "Description": "Git EC2 resource Id",
+			"Export": {
+				"Name": {
+					"Fn::Sub": "${AWS::StackName}:instanceId"
+				}
+			}
+        },
+        "publicIp": {
+			"Condition": "isPublicSubnet",
+            "Value": { "Fn::GetAtt": [ "GitInstance", "PublicIp" ] },
+            "Description": "Talend public IP",
+			"Export": {
+				"Name": {
+					"Fn::Sub": "${AWS::StackName}:publicIp" 
+				} 
+			}
+        },
+        "privateIp": {
+            "Value": { "Fn::GetAtt": [ "GitInstance", "PrivateIp" ] },
+            "Description": "Talend private IP",
+			"Export": {
+				"Name": {
+					"Fn::Sub": "${AWS::StackName}:privateIp" 
+				}
+			}
+        },
+        "publicDnsName": {
+			"Condition": "isPublicSubnet",
+            "Value": { "Fn::GetAtt": [ "GitInstance", "PublicDnsName" ] },
+            "Description": "Talend public DNS",
+			"Export": {
+				"Name": {
+					"Fn::Sub": "${AWS::StackName}:publicDns"
+				}
+			}
+        },
+        "privateDnsName": {
+            "Value": { "Fn::GetAtt": [ "GitInstance", "PrivateDnsName" ] },
+            "Description": "Talend private DNS",
+			"Export": {
+				"Name": {
+					"Fn::Sub": "${AWS::StackName}:privateDns" 
+				}
+			}
         }
     }
 }
