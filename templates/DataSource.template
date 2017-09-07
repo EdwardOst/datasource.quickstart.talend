@@ -49,7 +49,10 @@
                         "pDBPassword",
                         "pDBClass",
                         "pDBAllocatedStorage",
-                        "pRSPassword"
+						"pRSUsername",						
+                        "pRSPassword",
+						"pRSDBName",
+						"pRSPort"
                     ]
                 }
             ]
@@ -403,10 +406,26 @@
             "Description": "Allocated Storage (in GB) for RDS instance",
             "Type": "String"
         },
+		"pRSUsername": {
+            "Description": "Username of RedShift Instance",
+            "Type": "String",
+			"Default": "oodlersuser"
+        },
+		
         "pRSPassword": {
-            "Description": "Password of DB Instance",
+            "Description": "Password of RedShift Instance",
             "NoEcho": true,
             "Type": "String"
+        },
+		"pRSDBName": {
+            "Description": "Database name of RedShift Instance",
+            "Type": "String",
+			"Default": "oodleredshift"
+        },
+		"pRSPort": {
+            "Description": "Port of RedShift Instance",
+            "Type": "String",
+			"Default": "3306"
         },
         "pEnvironment": {
             "Description": "Environment type (development, test, or production)",
@@ -430,7 +449,7 @@
         "createRedshift": {
             "Description": "Create Redshift.",
             "Type": "String",
-            "Default": "false",
+            "Default": "true",
             "AllowedValues": [
                 "true",
                 "false"
@@ -439,7 +458,7 @@
         "createEMR": {
             "Description": "Create EMR.",
             "Type": "String",
-            "Default": "false",
+            "Default": "true",
             "AllowedValues": [
                 "true",
                 "false"
@@ -785,12 +804,18 @@
                 },
                 "ClusterType": "single-node",
                 "NodeType": "dc1.large",
-                "DBName": "testredshift",
-                "MasterUsername": "testuserrs",
+                "DBName": {
+                    "Ref": "pRSDBName"
+                },
+                "MasterUsername": {
+                    "Ref": "pRSUsername"
+                },
                 "MasterUserPassword": {
                     "Ref": "pRSPassword"
                 },
-                "Port": 3306,
+                "Port": {
+                    "Ref": "pRSPort"
+                },
                 "PubliclyAccessible": false
             },
             "Metadata": {
@@ -877,6 +902,28 @@
             "Value": {
                 "Ref": "rSecurityGroupRDS"
             }
-        }
+        },
+		"rEMRDNS": {
+			"Condition": "CreateEmrCondition",
+            "Value": {
+                "Fn::GetAtt": ["rEMRInstance","MasterPublicDNS"]
+            }
+			
+			
+        },
+		"rS3DNS": {
+			
+            "Value": {
+                "Fn::GetAtt": ["rTalendStorageBucket","DomainName"]
+            }
+			
+			
+        },
+		"rRSJDBCURL": {
+			"Condition": "CreateRedshiftCondition",
+			"Value": {
+			"Fn::Join": [ "", ["jdbc:redshift://", {"Fn::GetAtt": ["rRedShiftInstance","Endpoint.Address"]}, ":", { "Ref" : "pRSPort"}, "/",  { "Ref" : "pRSDBName"} ] ]
+		}}
     }
 }
+
