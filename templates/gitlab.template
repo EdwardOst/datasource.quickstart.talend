@@ -458,20 +458,16 @@
                             "",
                             [
                                 "#!/bin/bash -xe\n",
-                                "apt-get install -y aws-cfn-bootstrap\n",
-								"#fix ec2 hostname resolution\n",
-                                "wget https://s3.amazonaws.com/baseline.quickstart.talend/bootstrap/ec2-metadata\n",
-								"chmod +x ec2-metadata\n",
-                                "wget https://s3.amazonaws.com/baseline.quickstart.talend/bootstrap/update_hosts.sh\n",
-								"chmod +x update_hosts.sh\n",
-                                "./update_hosts.sh\n",
+                                "apt-get -y update\n",
+                                "apt-get -y install python-setuptools\n",
+                                "easy_install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz\n",
                                 "# Install the files and packages from the metadata\n",
                                 "/opt/aws/bin/cfn-init -v ",
                                 "         --stack ",
                                 {
                                     "Ref": "AWS::StackName"
                                 },
-                                "         --resource TalendServerInstance ",
+                                "         --resource EC2Instance ",
                                 "         --configsets All ",
                                 "         --region ",
                                 {
@@ -483,7 +479,7 @@
                                 {
                                     "Ref": "AWS::StackName"
                                 },
-                                "         --resource TalendServerInstance ",
+                                "         --resource EC2Instance ",
                                 "         --region ",
                                 {
                                     "Ref": "AWS::Region"
