@@ -458,11 +458,14 @@
                             "",
                             [
                                 "#!/bin/bash -xe\n",
-                                "apt-get -y update\n",
+                                "sleep 30\n",
+                                "echo "pwd: $(pwd)" 1>&2\n",
+                                "echo "whoami: $(whoami)" 1>&2\n",
+                                "while ! apt-get update -q ; do sleep 10; done\n",
                                 "apt-get -y install python-setuptools\n",
                                 "easy_install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz\n",
                                 "# Install the files and packages from the metadata\n",
-                                "/opt/aws/bin/cfn-init -v ",
+                                "cfn-init -v ",
                                 "         --stack ",
                                 {
                                     "Ref": "AWS::StackName"
