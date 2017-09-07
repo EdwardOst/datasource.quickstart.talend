@@ -543,17 +543,18 @@
                                     "Fn::Join": [
                                         "\n",
                                         [
-                                            "#!/bin/bash -eu"
-                                            "",
-                                            function gitlab_conf() { ",
-                                            { "Fn::Sub": "    local git_admin_userid=${GitAdminUserid}" },
-                                            { "Fn::Sub": "    local git_admin_password=${GitAdminPassword}" },
-                                            { "Fn::Sub": "    local git_admin_email=${GitAdminEmail}" },
-                                            { "Fn::Sub": "    local git_tac_userid=${GitTacUserid}" },
-                                            { "Fn::Sub": "    local git_tac_password=${GitTacPassword}" },
-                                            { "Fn::Sub": "    local git_tac_email=${GitTacEmail}" },
-                                            { "Fn::Sub": "    local git_repo=${GitRepo}" },
-                                            { "Fn::Sub": "    local source_url=${GitSourceUrl}" },
+                                            "#!/usr/bin/env bash", "",
+                                            "set -e",
+                                            "set -u", "",
+                                            "function gitlab_conf() { ",
+                                            { "Fn::Sub": "    local git_admin_userid=\"${GitAdminUserid}\"" },
+                                            { "Fn::Sub": "    local git_admin_password=\"${GitAdminPassword}\"" },
+                                            { "Fn::Sub": "    local git_admin_email=\"${GitAdminEmail}\"" },
+                                            { "Fn::Sub": "    local git_tac_userid=\"${GitTacUserid}\"" },
+                                            { "Fn::Sub": "    local git_tac_password=\"${GitTacPassword}\"" },
+                                            { "Fn::Sub": "    local git_tac_email=\"${GitTacEmail}\"" },
+                                            { "Fn::Sub": "    local git_repo=\"${GitRepo}\"" },
+                                            { "Fn::Sub": "    local source_url=\"${GitSourceUrl}\"" },
                                             "\"${@}\"",
                                             "}"
                                         ]
