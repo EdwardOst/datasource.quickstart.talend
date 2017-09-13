@@ -437,8 +437,8 @@
             "Type": "String",
             "Default": "true"
         },
-        "createRDS": {
-            "Description": "Create RDS.",
+        "CreateRedshift": {
+            "Description": "Create Redshift.",
             "Type": "String",
             "Default": "false",
             "AllowedValues": [
@@ -446,26 +446,8 @@
                 "false"
             ]
         },
-        "createRedshift": {
-            "Description": "Create Redshift.",
-            "Type": "String",
-            "Default": "true",
-            "AllowedValues": [
-                "true",
-                "false"
-            ]
-        },
-        "createEMR": {
+        "CreateEMR": {
             "Description": "Create EMR.",
-            "Type": "String",
-            "Default": "true",
-            "AllowedValues": [
-                "true",
-                "false"
-            ]
-        },
-        "createMultiAZ": {
-            "Description": "Create multiple availability zones.",
             "Type": "String",
             "Default": "false",
             "AllowedValues": [
@@ -526,88 +508,30 @@
     "Conditions": {
         "IsGovCloud": {
             "Fn::Equals": [
-                {
-                    "Ref": "AWS::Region"
-                },
+                { "Ref": "AWS::Region" },
                 "us-gov-west-1"
             ]
         },
         "SupportsGlacier": {
             "Fn::Equals": [
-                {
-                    "Ref": "pSupportsGlacier"
-                },
+                { "Ref": "pSupportsGlacier" },
                 true
-            ]
-        },
-        "CreateRdsCondition": {
-            "Fn::Equals": [
-                {
-                    "Ref": "createRDS"
-                },
-                "true"
             ]
         },
         "CreateRedshiftCondition": {
             "Fn::Equals": [
-                {
-                    "Ref": "createRedshift"
-                },
+                { "Ref": "CreateRedshift" },
                 "true"
             ]
         },
         "CreateEmrCondition": {
             "Fn::Equals": [
-                {
-                    "Ref": "createEMR"
-                },
-                "true"
-            ]
-        },
-        "CreateMultiAzCondition": {
-            "Fn::Equals": [
-                {
-                    "Ref": "createMultiAZ"
-                },
+                { "Ref": "CreateEMR" },
                 "true"
             ]
         }
     },
     "Resources": {
-        "rSecurityGroupRDS": {
-            "Type": "AWS::EC2::SecurityGroup",
-            "Properties": {
-                "GroupDescription": "Port 3306 database for access",
-                "VpcId": {
-                    "Ref": "pProductionVPC"
-                },
-                "SecurityGroupIngress": [
-                    {
-                        "IpProtocol": "tcp",
-                        "FromPort": 3306,
-                        "ToPort": 3306,
-                        "CidrIp": "0.0.0.0/0"
-                    }
-                ],
-                "Tags": [
-                    {
-                        "Key": "Name",
-                        "Value": "sg-database-access"
-                    },
-                    {
-                        "Key": "Environment",
-                        "Value": {
-                            "Ref": "pEnvironment"
-                        }
-                    }
-                ]
-            },
-            "Metadata": {
-                "AWS::CloudFormation::Designer": {
-                    "id": "33d926fe-b6af-46e2-8f20-98c76e2bd411"
-                }
-            }
-        },
         "rTalendStorageBucket": {
             "Type": "AWS::S3::Bucket",
             "Properties": {
@@ -707,72 +631,6 @@
             "Metadata": {
                 "AWS::CloudFormation::Designer": {
                     "id": "6cf08e46-6787-42f0-8a21-4947f424ad24"
-                }
-            }
-        },
-        "rDBSubnetGroup": {
-            "Type": "AWS::RDS::DBSubnetGroup",
-            "Properties": {
-                "DBSubnetGroupDescription": "MySQL RDS Subnet Group",
-                "SubnetIds": [
-                    {
-                        "Ref": "pDBPrivateSubnetA"
-                    },
-                    {
-                        "Ref": "pDBPrivateSubnetB"
-                    }
-                ]
-            },
-            "Metadata": {
-                "AWS::CloudFormation::Designer": {
-                    "id": "d304f1e3-4a44-48fc-bd3e-ca1ae03aae9c"
-                }
-            }
-        },
-        "rRDSInstanceMySQL": {
-            "Type": "AWS::RDS::DBInstance",
-            "DependsOn": [
-                "rDBSubnetGroup",
-                "rSecurityGroupRDS"
-            ],
-            "Condition": "CreateRdsCondition",
-            "Properties": {
-                "DBName": {
-                    "Ref": "pDBName"
-                },
-                "Engine": "MySQL",
-                "MultiAZ": {
-                    "Fn::If": [
-                        "CreateMultiAzCondition",
-                        true,
-                        false
-                    ]
-                },
-                "StorageEncrypted": true,
-                "MasterUsername": {
-                    "Ref": "pDBUser"
-                },
-                "MasterUserPassword": {
-                    "Ref": "pDBPassword"
-                },
-                "DBInstanceClass": {
-                    "Ref": "pDBClass"
-                },
-                "AllocatedStorage": {
-                    "Ref": "pDBAllocatedStorage"
-                },
-                "VPCSecurityGroups": [
-                    {
-                        "Ref": "rSecurityGroupRDS"
-                    }
-                ],
-                "DBSubnetGroupName": {
-                    "Ref": "rDBSubnetGroup"
-                }
-            },
-            "Metadata": {
-                "AWS::CloudFormation::Designer": {
-                    "id": "ac4f33e1-90aa-4ff7-bb1e-027f92be4e13"
                 }
             }
         },
@@ -898,11 +756,6 @@
         }
     },
     "Outputs": {
-        "rSecurityGroupRDS": {
-            "Value": {
-                "Ref": "rSecurityGroupRDS"
-            }
-        },
 		"rEMRDNS": {
 			"Condition": "CreateEmrCondition",
             "Value": {
