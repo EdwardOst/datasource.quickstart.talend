@@ -682,8 +682,7 @@
                 }
             },
             "DependsOn": [
-                "rRSSubnetGroup",
-                "rSecurityGroupRDS"
+                "rRSSubnetGroup"
             ]
         },
         "rEMRInstance": {
