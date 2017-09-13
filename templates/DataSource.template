@@ -636,6 +636,7 @@
         },
         "rRSSubnetGroup": {
             "Type": "AWS::Redshift::ClusterSubnetGroup",
+            "Condition": "CreateRedshiftCondition",
             "Properties": {
                 "Description": "RedShift Subnet linked to both private database subnets",
                 "SubnetIds": [
@@ -755,27 +756,19 @@
         }
     },
     "Outputs": {
+		"rS3DNS": {
+            "Value": { "Fn::GetAtt": ["rTalendStorageBucket","DomainName"] }
+        },
 		"rEMRDNS": {
 			"Condition": "CreateEmrCondition",
-            "Value": {
-                "Fn::GetAtt": ["rEMRInstance","MasterPublicDNS"]
-            }
-			
-			
-        },
-		"rS3DNS": {
-			
-            "Value": {
-                "Fn::GetAtt": ["rTalendStorageBucket","DomainName"]
-            }
-			
-			
+            "Value": { "Fn::GetAtt": ["rEMRInstance","MasterPublicDNS"] }
         },
 		"rRSJDBCURL": {
 			"Condition": "CreateRedshiftCondition",
 			"Value": {
-			"Fn::Join": [ "", ["jdbc:redshift://", {"Fn::GetAtt": ["rRedShiftInstance","Endpoint.Address"]}, ":", { "Ref" : "pRSPort"}, "/",  { "Ref" : "pRSDBName"} ] ]
-		}}
+                "Fn::Sub": "jdbc:redshift://${rRedShiftInstance.Endpoint.Address}:${pRSPort}/${pRSPort}"
+            }
+        }
     }
 }
 
