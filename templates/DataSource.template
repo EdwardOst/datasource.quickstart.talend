@@ -136,6 +136,109 @@
         }
     },
     "Resources": {
+        "TalendStorageBucket": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+                "AccessControl": "Private",
+                "LifecycleConfiguration": {
+                    "Rules": [
+                        {
+                            "Id": "Transition90daysRetain7yrs",
+                            "Status": "Enabled",
+                            "ExpirationInDays": 2555,
+                            "Transition": {
+                                "TransitionInDays": 90,
+                                "StorageClass": {
+                                    "Fn::If": [
+                                        "SupportsGlacierCondition",
+                                        "GLACIER",
+                                        "STANDARD_IA"
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                "VersioningConfiguration": {
+                    "Status": "Enabled"
+                }
+            },
+            "DeletionPolicy": "Delete",
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "513fe052-d06e-4678-a16a-19021407af29"
+                }
+            }
+        },
+        "TalendStorageS3Policy": {
+            "Type": "AWS::S3::BucketPolicy",
+            "DependsOn": "TalendStorageBucket",
+            "Properties": {
+                "Bucket": {
+                    "Ref": "TalendStorageBucket"
+                },
+                "PolicyDocument": {
+                    "Statement": [
+                        {
+                            "Sid": "EnforceSecureTransport",
+                            "Action": "s3:*",
+                            "Effect": "Allow",
+                            "Principal": "*",
+                            "Resource": {
+                                "Fn::Sub": [
+                                    "arn:${Endpoint}:s3:::${TalendStorageBucket}",
+                                    {
+                                        "Endpoint": {
+                                            "Fn::If": [
+                                                "IsGovCloud",
+                                                "aws-us-gov",
+                                                "aws"
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
+                            "Condition": {
+                                "Bool": {
+                                    "aws:SecureTransport": "false"
+                                }
+                            }
+                        },
+                        {
+                            "Sid": "EnforceEncryptionOnPut",
+                            "Effect": "Deny",
+                            "Principal": "*",
+                            "Action": "s3:PutObject",
+                            "Resource": {
+                                "Fn::Sub": [
+                                    "arn:${Endpoint}:s3:::${TalendStorageBucket}/*",
+                                    {
+                                        "Endpoint": {
+                                            "Fn::If": [
+                                                "IsGovCloud",
+                                                "aws-us-gov",
+                                                "aws"
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
+                            "Condition": {
+                                "StringNotEquals": {
+                                    "s3:x-amz-server-side-encryption": "AES256"
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "6cf08e46-6787-42f0-8a21-4947f424ad24"
+                }
+            }
+        },
+        
         "RedhsiftSubnetGroup": {
             "Type": "AWS::Redshift::ClusterSubnetGroup",
             "Condition": "CreateRedshiftCondition",
@@ -258,6 +361,9 @@
         }
     },
     "Outputs": {
+		"TalendS3DomainName": {
+            "Value": { "Fn::GetAtt": ["TalendStorageBucket","DomainName"] }
+        },
 		"EmrMasterPublicDns": {
 			"Condition": "CreateEmrCondition",
             "Value": { "Fn::GetAtt": ["EmrInstance","MasterPublicDNS"] }
