@@ -163,20 +163,13 @@
                     "Status": "Enabled"
                 }
             },
-            "DeletionPolicy": "Delete",
-            "Metadata": {
-                "AWS::CloudFormation::Designer": {
-                    "id": "513fe052-d06e-4678-a16a-19021407af29"
-                }
-            }
+            "DeletionPolicy": "Delete"
         },
         "TalendStorageS3Policy": {
             "Type": "AWS::S3::BucketPolicy",
             "DependsOn": "TalendStorageBucket",
             "Properties": {
-                "Bucket": {
-                    "Ref": "TalendStorageBucket"
-                },
+                "Bucket": { "Ref": "TalendStorageBucket" },
                 "PolicyDocument": {
                     "Statement": [
                         {
@@ -231,11 +224,6 @@
                         }
                     ]
                 }
-            },
-            "Metadata": {
-                "AWS::CloudFormation::Designer": {
-                    "id": "6cf08e46-6787-42f0-8a21-4947f424ad24"
-                }
             }
         },
         
@@ -245,51 +233,25 @@
             "Properties": {
                 "Description": "RedShift Subnet linked to both private database subnets",
                 "SubnetIds": [
-                    {
-                        "Ref": "RedshiftSubnetA"
-                    },
-                    {
-                        "Ref": "RedshiftSubnetB"
-                    }
+                    { "Ref": "RedshiftSubnetA" },
+                    { "Ref": "RedshiftSubnetB" }
                 ]
-            },
-            "Metadata": {
-                "AWS::CloudFormation::Designer": {
-                    "id": "3b9902b0-0fd2-431b-89e1-7d2ab3358313"
-                }
             }
         },
-        "RedShiftInstance": {
+        "RedshiftInstance": {
             "Type": "AWS::Redshift::Cluster",
             "Condition": "CreateRedshiftCondition",
+            "DependsOn": [ "RedhsiftSubnetGroup" ],
             "Properties": {
-                "ClusterSubnetGroupName": {
-                    "Ref": "RedhsiftSubnetGroup"
-                },
+                "ClusterSubnetGroupName": { "Ref": "RedhsiftSubnetGroup" },
                 "ClusterType": "single-node",
                 "NodeType": "dc1.large",
-                "DBName": {
-                    "Ref": "RedshiftDbName"
-                },
-                "MasterUsername": {
-                    "Ref": "RedshiftUsername"
-                },
-                "MasterUserPassword": {
-                    "Ref": "RedshiftPassword"
-                },
-                "Port": {
-                    "Ref": "RedshiftPort"
-                },
+                "DBName": { "Ref": "RedshiftDbName" },
+                "MasterUsername": { "Ref": "RedshiftUsername" },
+                "MasterUserPassword": { "Ref": "RedshiftPassword" },
+                "Port": { "Ref": "RedshiftPort" },
                 "PubliclyAccessible": false
-            },
-            "Metadata": {
-                "AWS::CloudFormation::Designer": {
-                    "id": "501dbf3c-015d-4d63-ad59-96efdc50c822"
-                }
-            },
-            "DependsOn": [
-                "RedhsiftSubnetGroup"
-            ]
+            }
         },
         "EmrInstance": {
             "Type": "AWS::EMR::Cluster",
@@ -309,12 +271,8 @@
                         "Name": "Core instance group - 2"
                     },
                     "TerminationProtected": false,
-                    "Ec2SubnetId": {
-                        "Ref": "EmrSubnetA"
-                    },
-                    "Ec2KeyName": {
-                        "Ref": "KeyPair"
-                    }
+                    "Ec2SubnetId": { "Ref": "EmrSubnetA" },
+                    "Ec2KeyName": { "Ref": "KeyPair" }
                 },
                 "Applications": [
                     {
@@ -338,41 +296,58 @@
                 "Tags": [
                     {
                         "Key": "Name",
-                        "Value": {
-                            "Fn::Join": [
-                                "",
-                                [
-                                    "emr-instance-",
-                                    {
-                                        "Ref": "AWS::StackName"
-                                    },
-                                    ""
-                                ]
-                            ]
-                        }
+                        "Value": { "Fn::Sub": "emr-instance-${AWS::StackName}" }
                     }
                 ]
-            },
-            "Metadata": {
-                "AWS::CloudFormation::Designer": {
-                    "id": "02fe4f4a-7d84-4ccf-85d9-3cdf97f4d02b"
-                }
             }
         }
     },
     "Outputs": {
 		"TalendS3DomainName": {
-            "Value": { "Fn::GetAtt": ["TalendStorageBucket","DomainName"] }
+            "Value": { "Fn::GetAtt": ["TalendStorageBucket","DomainName"] },
+			"Export": {
+				"Name": {
+					"Fn::Sub": "${AWS::StackName}:TalendS3DomainName" 
+				}
+			}
         },
 		"EmrMasterPublicDns": {
 			"Condition": "CreateEmrCondition",
-            "Value": { "Fn::GetAtt": ["EmrInstance","MasterPublicDNS"] }
+            "Value": { "Fn::GetAtt": ["EmrInstance","MasterPublicDNS"] },
+			"Export": {
+				"Name": {
+					"Fn::Sub": "${AWS::StackName}:EmrMasterPublicDns" 
+				}
+			}
+        },
+        "RedshiftEndpoint": {
+			"Condition": "CreateRedshiftCondition",
+            "Value": { "Fn::GetAtt": [ "RedshiftInstance", "Endpoint.Address" ] },
+			"Export": {
+				"Name": {
+					"Fn::Sub": "${AWS::StackName}:RedshiftEndpoint" 
+				}
+			}
+        },
+        "RedshiftPort": {
+			"Condition": "CreateRedshiftCondition",
+            "Value": { "Fn::GetAtt": [ "RedshiftInstance", "Endpoint.Port" ] },
+			"Export": {
+				"Name": {
+					"Fn::Sub": "${AWS::StackName}:RedshiftPort" 
+				}
+			}
         },
 		"RedshiftJdbcUrl": {
 			"Condition": "CreateRedshiftCondition",
 			"Value": {
-                "Fn::Sub": "jdbc:redshift://${RedShiftInstance.Endpoint.Address}:${RedshiftPort}/${RedshiftPort}"
-            }
+                "Fn::Sub": "jdbc:redshift://${RedshiftInstance.Endpoint.Address}:${RedshiftInstance.Endpoint.Port}/${RedshiftDbName}"
+            },
+			"Export": {
+				"Name": {
+					"Fn::Sub": "${AWS::StackName}:RedshiftJdbcUrl" 
+				}
+			}
         }
     }
 }
