@@ -26,7 +26,7 @@
                     },
                     "Parameters": [
                         "CreateEmr",
-						"EMRVPC",
+                        "EMRVPC",
                         "EmrSubnetA"
                     ]
                 },
@@ -57,7 +57,11 @@
                     "y": 90
                 },
                 "z": 1,
-                "embeds": []
+                "embeds": [],
+                "isrelatedto": [
+                    "69408061-6344-4886-a71b-ea332e879b90",
+                    "c69c96cc-6920-4f27-a47f-29462d06915c"
+                ]
             },
             "cd3aad74-b4de-45ad-9f63-7d60f18698b3": {
                 "size": {
@@ -129,7 +133,10 @@
                     "y": 50
                 },
                 "z": 0,
-                "embeds": []
+                "embeds": [],
+                "dependson": [
+                    "69408061-6344-4886-a71b-ea332e879b90"
+                ]
             },
             "69408061-6344-4886-a71b-ea332e879b90": {
                 "size": {
@@ -142,6 +149,123 @@
                 },
                 "z": 0,
                 "embeds": []
+            },
+            "214dd294-8df7-4ccf-817e-2a3db5838af8": {
+                "source": {
+                    "id": "69408061-6344-4886-a71b-ea332e879b90"
+                },
+                "target": {
+                    "id": "69408061-6344-4886-a71b-ea332e879b90"
+                },
+                "z": 0
+            },
+            "6e378096-db13-4349-bef7-576440c43c49": {
+                "source": {
+                    "id": "69408061-6344-4886-a71b-ea332e879b90"
+                },
+                "target": {
+                    "id": "69408061-6344-4886-a71b-ea332e879b90"
+                },
+                "z": 0
+            },
+            "31268c7b-be70-4d7c-b187-3cd868ab6614": {
+                "source": {
+                    "id": "69408061-6344-4886-a71b-ea332e879b90"
+                },
+                "target": {
+                    "id": "69408061-6344-4886-a71b-ea332e879b90"
+                },
+                "z": 0
+            },
+            "1a4f66a5-9258-4b2a-803d-013f0bc10c7a": {
+                "source": {
+                    "id": "69408061-6344-4886-a71b-ea332e879b90"
+                },
+                "target": {
+                    "id": "c69c96cc-6920-4f27-a47f-29462d06915c"
+                },
+                "z": 0
+            },
+            "b7d2735c-0035-4a5f-93c9-4b842594b235": {
+                "source": {
+                    "id": "69408061-6344-4886-a71b-ea332e879b90"
+                },
+                "target": {
+                    "id": "c69c96cc-6920-4f27-a47f-29462d06915c"
+                },
+                "z": 0
+            },
+            "fe8a68d3-b44c-49a1-ac37-0878f9a7d6f0": {
+                "source": {
+                    "id": "69408061-6344-4886-a71b-ea332e879b90"
+                },
+                "target": {
+                    "id": "c69c96cc-6920-4f27-a47f-29462d06915c"
+                },
+                "z": 0
+            },
+            "1caf31eb-824b-4a33-9bfd-30765e9d4e98": {
+                "source": {
+                    "id": "c69c96cc-6920-4f27-a47f-29462d06915c"
+                },
+                "target": {
+                    "id": "69408061-6344-4886-a71b-ea332e879b90"
+                },
+                "z": 0
+            },
+            "68762f0f-147e-4796-8a06-cb02e81be83e": {
+                "source": {
+                    "id": "c69c96cc-6920-4f27-a47f-29462d06915c"
+                },
+                "target": {
+                    "id": "c69c96cc-6920-4f27-a47f-29462d06915c"
+                },
+                "z": 0
+            },
+            "ca41272c-22aa-49a5-9fdc-16e3a273dfaa": {
+                "source": {
+                    "id": "c69c96cc-6920-4f27-a47f-29462d06915c"
+                },
+                "target": {
+                    "id": "69408061-6344-4886-a71b-ea332e879b90"
+                },
+                "z": 0
+            },
+            "5e7be2c2-21b7-4afc-a143-ab3a46f074aa": {
+                "source": {
+                    "id": "c69c96cc-6920-4f27-a47f-29462d06915c"
+                },
+                "target": {
+                    "id": "c69c96cc-6920-4f27-a47f-29462d06915c"
+                },
+                "z": 0
+            },
+            "a28ad521-ef5c-4f1e-9054-88f7fd0b011e": {
+                "source": {
+                    "id": "c69c96cc-6920-4f27-a47f-29462d06915c"
+                },
+                "target": {
+                    "id": "69408061-6344-4886-a71b-ea332e879b90"
+                },
+                "z": 0
+            },
+            "6916f316-6a0f-4c71-9f32-15e8743720a9": {
+                "source": {
+                    "id": "c69c96cc-6920-4f27-a47f-29462d06915c"
+                },
+                "target": {
+                    "id": "c69c96cc-6920-4f27-a47f-29462d06915c"
+                },
+                "z": 0
+            },
+            "2248226d-a9b4-4177-bc91-6570ca615323": {
+                "source": {
+                    "id": "c69c96cc-6920-4f27-a47f-29462d06915c"
+                },
+                "target": {
+                    "id": "69408061-6344-4886-a71b-ea332e879b90"
+                },
+                "z": 3
             }
         }
     },
@@ -155,7 +279,7 @@
             "Description": "EMR Subnet A",
             "Type": "AWS::EC2::Subnet::Id"
         },
-		"EMRVPC": {
+        "EMRVPC": {
             "Description": "EMR VPC",
             "Type": "AWS::EC2::VPC::Id"
         },
@@ -423,8 +547,12 @@
                     "Ec2KeyName": {
                         "Ref": "KeyPair"
                     },
-					"EmrManagedMasterSecurityGroup" : {"Ref": "EMRMasterSG"},
-					"EmrManagedSlaveSecurityGroup" :  {"Ref": "EMRSlaveSG"}
+                    "EmrManagedMasterSecurityGroup": {
+                        "Ref": "EMRMasterSG"
+                    },
+                    "EmrManagedSlaveSecurityGroup": {
+                        "Ref": "EMRSlaveSG"
+                    }
                 },
                 "Applications": [
                     {
@@ -442,7 +570,6 @@
                 ],
                 "ReleaseLabel": "emr-5.0.0",
                 "Name": "EmrInstance",
-								
                 "JobFlowRole": "EMR_EC2_DefaultRole",
                 "ServiceRole": "EMR_DefaultRole",
                 "VisibleToAllUsers": true,
@@ -463,238 +590,355 @@
         },
         "EMRSlaveSG": {
             "Type": "AWS::EC2::SecurityGroup",
-			"DeletionPolicy" : "Retain",
+            "DeletionPolicy": "Delete",
             "Properties": {
-			"GroupDescription": "EMR Slave Security Group",
-			"VpcId": {"Ref": "EMRVPC"},
-		  "SecurityGroupEgress" : [{
-         "IpProtocol" : "-1",
-         "FromPort" : "0",
-         "ToPort" : "65535",
-         "CidrIp" : "0.0.0.0/0"
-		  }]
-			},
+                "GroupDescription": "EMR Slave Security Group",
+                "VpcId": {
+                    "Ref": "EMRVPC"
+                },
+                "SecurityGroupEgress": [
+                    {
+                        "IpProtocol": "-1",
+                        "FromPort": "0",
+                        "ToPort": "65535",
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ]
+            },
             "Metadata": {
                 "AWS::CloudFormation::Designer": {
                     "id": "c69c96cc-6920-4f27-a47f-29462d06915c"
                 }
+            },
+            "DependsOn": [
+                "EMRMasterSG"
+            ]
+        },
+        "EMRS1": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "IpProtocol": "tcp",
+                "FromPort": "0",
+                "ToPort": "65535",
+                "SourceSecurityGroupId": {
+                    "Ref": "EMRSlaveSG"
+                },
+                "GroupId": {
+                    "Ref": "EMRSlaveSG"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "6916f316-6a0f-4c71-9f32-15e8743720a9"
+                }
             }
         },
-			"EMRS1": {
-			"Type" : "AWS::EC2::SecurityGroupIngress",
-			"Properties" : {
-            "IpProtocol" : "tcp",
-            "FromPort" : "0",
-            "ToPort" : "65535",
-            "SourceSecurityGroupId" : {"Ref" : "EMRSlaveSG"},
-			"GroupId" : {"Ref" : "EMRSlaveSG"}
-			}},	
-			
-			"EMRS2": {
-			"Type" : "AWS::EC2::SecurityGroupIngress",
-			"Properties" : {
-            "IpProtocol" : "tcp",
-            "FromPort" : "0",
-            "ToPort" : "65535",
-            "SourceSecurityGroupId" : {"Ref" : "EMRMasterSG"},
-			"GroupId" : {"Ref" : "EMRSlaveSG"}
-			}},	
-			
-			"EMRS3": {
-			"Type" : "AWS::EC2::SecurityGroupIngress",
-			"Properties" : {
-            "IpProtocol" : "UDP",
-            "FromPort" : "0",
-            "ToPort" : "65535",
-            "SourceSecurityGroupId" : {"Ref" : "EMRSlaveSG"},
-			"GroupId" : {"Ref" : "EMRSlaveSG"}
-			}},	
-			
-			"EMRS4": {
-			"Type" : "AWS::EC2::SecurityGroupIngress",
-			"Properties" : {
-            "IpProtocol" : "UDP",
-            "FromPort" : "0",
-            "ToPort" : "65535",
-            "SourceSecurityGroupId" : {"Ref" : "EMRMasterSG"},
-			"GroupId" : {"Ref" : "EMRSlaveSG"}
-			}},
-			
-			"EMRS5": {
-			"Type" : "AWS::EC2::SecurityGroupIngress",
-			"Properties" : {
-            "IpProtocol" : "ICMP",
-            "FromPort" : "8",
-            "ToPort" : "0",
-            "SourceSecurityGroupId" : {"Ref" : "EMRSlaveSG"},
-			"GroupId" : {"Ref" : "EMRSlaveSG"}
-			}},	
-			
-			"EMRS6": {
-			"Type" : "AWS::EC2::SecurityGroupIngress",
-			"Properties" : {
-            "IpProtocol" : "ICMP",
-            "FromPort" : "8",
-            "ToPort" : "0",
-            "SourceSecurityGroupId" : {"Ref" : "EMRMasterSG"},
-			"GroupId" : {"Ref" : "EMRSlaveSG"}
-			}},
-		
-		
-		
+        "EMRS2": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "IpProtocol": "tcp",
+                "FromPort": "0",
+                "ToPort": "65535",
+                "SourceSecurityGroupId": {
+                    "Ref": "EMRMasterSG"
+                },
+                "GroupId": {
+                    "Ref": "EMRSlaveSG"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "a28ad521-ef5c-4f1e-9054-88f7fd0b011e"
+                }
+            }
+        },
+        "EMRS3": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "IpProtocol": "UDP",
+                "FromPort": "0",
+                "ToPort": "65535",
+                "SourceSecurityGroupId": {
+                    "Ref": "EMRSlaveSG"
+                },
+                "GroupId": {
+                    "Ref": "EMRSlaveSG"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "5e7be2c2-21b7-4afc-a143-ab3a46f074aa"
+                }
+            }
+        },
+        "EMRS4": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "IpProtocol": "UDP",
+                "FromPort": "0",
+                "ToPort": "65535",
+                "SourceSecurityGroupId": {
+                    "Ref": "EMRMasterSG"
+                },
+                "GroupId": {
+                    "Ref": "EMRSlaveSG"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "ca41272c-22aa-49a5-9fdc-16e3a273dfaa"
+                }
+            }
+        },
+        "EMRS5": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "IpProtocol": "ICMP",
+                "FromPort": "8",
+                "ToPort": "0",
+                "SourceSecurityGroupId": {
+                    "Ref": "EMRSlaveSG"
+                },
+                "GroupId": {
+                    "Ref": "EMRSlaveSG"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "68762f0f-147e-4796-8a06-cb02e81be83e"
+                }
+            }
+        },
+        "EMRS6": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "IpProtocol": "ICMP",
+                "FromPort": "8",
+                "ToPort": "0",
+                "SourceSecurityGroupId": {
+                    "Ref": "EMRMasterSG"
+                },
+                "GroupId": {
+                    "Ref": "EMRSlaveSG"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "1caf31eb-824b-4a33-9bfd-30765e9d4e98"
+                }
+            }
+        },
         "EMRMasterSG": {
             "Type": "AWS::EC2::SecurityGroup",
-			"DeletionPolicy" : "Retain",
-            "Properties": {"GroupDescription": "EMR Master Security Group",
-			"VpcId": {"Ref": "EMRVPC"},
-			"SecurityGroupIngress" : [
-			{
-            "IpProtocol" : "tcp",
-            "FromPort" : "8443",
-            "ToPort" : "8443",
-            "CidrIp" : "207.171.167.101/32"
-			},
-			{
-            "IpProtocol" : "tcp",
-            "FromPort" : "8443",
-            "ToPort" : "8443",
-            "CidrIp" : "207.171.167.25/32"
-			},
-			{
-			"IpProtocol" : "tcp",
-            "FromPort" : "8443",
-            "ToPort" : "8443",
-            "CidrIp" : "207.171.167.26/32"
-			},
-			{
-			"IpProtocol" : "tcp",
-            "FromPort" : "8443",
-            "ToPort" : "8443",
-            "CidrIp" : "207.171.172.6/32"
-			},
-			{
-            "IpProtocol" : "tcp",
-            "FromPort" : "8443",
-            "ToPort" : "8443",
-            "CidrIp" : "72.21.217.0/24"
-			},
-			{
-			"IpProtocol" : "tcp",
-            "FromPort" : "8443",
-            "ToPort" : "8443",
-            "CidrIp" : "72.21.198.64/29"
-			},
-			{
-			"IpProtocol" : "tcp",
-            "FromPort" : "8443",
-            "ToPort" : "8443",
-            "CidrIp" : "72.21.196.64/29"
-			},
-			{
-			"IpProtocol" : "tcp",
-            "FromPort" : "8443",
-            "ToPort" : "8443",
-            "CidrIp" : "54.239.98.0/24"
-			},
-			{
-			"IpProtocol" : "tcp",
-            "FromPort" : "8443",
-            "ToPort" : "8443",
-            "CidrIp" : "54.240.217.16/29"
-			},
-			{
-            "IpProtocol" : "tcp",
-            "FromPort" : "8443",
-            "ToPort" : "8443",
-            "CidrIp" : "54.240.217.64/28"
-			},
-			{
-			"IpProtocol" : "tcp",
-            "FromPort" : "8443",
-            "ToPort" : "8443",
-            "CidrIp" : "54.240.217.8/29"
-			},
-			{
-			"IpProtocol" : "tcp",
-            "FromPort" : "8443",
-            "ToPort" : "8443",
-            "CidrIp" : "54.240.217.80/29"
-			}
-			
-			
-		 ],
-      "SecurityGroupEgress" : [{
-         "IpProtocol" : "-1",
-         "FromPort" : "0",
-         "ToPort" : "65535",
-         "CidrIp" : "0.0.0.0/0"
-      }]	
-			},
+            "DeletionPolicy": "Delete",
+            "Properties": {
+                "GroupDescription": "EMR Master Security Group",
+                "VpcId": {
+                    "Ref": "EMRVPC"
+                },
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "8443",
+                        "ToPort": "8443",
+                        "CidrIp": "207.171.167.101/32"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "8443",
+                        "ToPort": "8443",
+                        "CidrIp": "207.171.167.25/32"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "8443",
+                        "ToPort": "8443",
+                        "CidrIp": "207.171.167.26/32"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "8443",
+                        "ToPort": "8443",
+                        "CidrIp": "207.171.172.6/32"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "8443",
+                        "ToPort": "8443",
+                        "CidrIp": "72.21.217.0/24"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "8443",
+                        "ToPort": "8443",
+                        "CidrIp": "72.21.198.64/29"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "8443",
+                        "ToPort": "8443",
+                        "CidrIp": "72.21.196.64/29"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "8443",
+                        "ToPort": "8443",
+                        "CidrIp": "54.239.98.0/24"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "8443",
+                        "ToPort": "8443",
+                        "CidrIp": "54.240.217.16/29"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "8443",
+                        "ToPort": "8443",
+                        "CidrIp": "54.240.217.64/28"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "8443",
+                        "ToPort": "8443",
+                        "CidrIp": "54.240.217.8/29"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "8443",
+                        "ToPort": "8443",
+                        "CidrIp": "54.240.217.80/29"
+                    }
+                ],
+                "SecurityGroupEgress": [
+                    {
+                        "IpProtocol": "-1",
+                        "FromPort": "0",
+                        "ToPort": "65535",
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ]
+            },
             "Metadata": {
                 "AWS::CloudFormation::Designer": {
                     "id": "69408061-6344-4886-a71b-ea332e879b90"
                 }
             }
         },
-			"EMRM1": {
-			"Type" : "AWS::EC2::SecurityGroupIngress",
-			"Properties" : {
-            "IpProtocol" : "tcp",
-            "FromPort" : "0",
-            "ToPort" : "65535",
-            "SourceSecurityGroupId" : {"Ref" : "EMRSlaveSG"},
-			"GroupId" : {"Ref" : "EMRMasterSG"}
-			}},	
-			
-			"EMRM2": {
-			"Type" : "AWS::EC2::SecurityGroupIngress",
-			"Properties" : {
-            "IpProtocol" : "tcp",
-            "FromPort" : "0",
-            "ToPort" : "65535",
-            "SourceSecurityGroupId" : {"Ref" : "EMRMasterSG"},
-			"GroupId" : {"Ref" : "EMRMasterSG"}
-			}},	
-			
-			"EMRM3": {
-			"Type" : "AWS::EC2::SecurityGroupIngress",
-			"Properties" : {
-            "IpProtocol" : "UDP",
-            "FromPort" : "0",
-            "ToPort" : "65535",
-            "SourceSecurityGroupId" : {"Ref" : "EMRSlaveSG"},
-			"GroupId" : {"Ref" : "EMRMasterSG"}
-			}},	
-			
-			"EMRM4": {
-			"Type" : "AWS::EC2::SecurityGroupIngress",
-			"Properties" : {
-            "IpProtocol" : "UDP",
-            "FromPort" : "0",
-            "ToPort" : "65535",
-            "SourceSecurityGroupId" : {"Ref" : "EMRMasterSG"},
-			"GroupId" : {"Ref" : "EMRMasterSG"}
-			}},
-			
-			"EMRM5": {
-			"Type" : "AWS::EC2::SecurityGroupIngress",
-			"Properties" : {
-            "IpProtocol" : "ICMP",
-            "FromPort" : "8",
-            "ToPort" : "0",
-            "SourceSecurityGroupId" : {"Ref" : "EMRSlaveSG"},
-			"GroupId" : {"Ref" : "EMRMasterSG"}
-			}},	
-			
-			"EMRM6": {
-			"Type" : "AWS::EC2::SecurityGroupIngress",
-			"Properties" : {
-            "IpProtocol" : "ICMP",
-            "FromPort" : "8",
-            "ToPort" : "0",
-            "SourceSecurityGroupId" : {"Ref" : "EMRMasterSG"},
-			"GroupId" : {"Ref" : "EMRMasterSG"}
-			}}
+        "EMRM1": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "IpProtocol": "tcp",
+                "FromPort": "0",
+                "ToPort": "65535",
+                "SourceSecurityGroupId": {
+                    "Ref": "EMRSlaveSG"
+                },
+                "GroupId": {
+                    "Ref": "EMRMasterSG"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "fe8a68d3-b44c-49a1-ac37-0878f9a7d6f0"
+                }
+            }
+        },
+        "EMRM2": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "IpProtocol": "tcp",
+                "FromPort": "0",
+                "ToPort": "65535",
+                "SourceSecurityGroupId": {
+                    "Ref": "EMRMasterSG"
+                },
+                "GroupId": {
+                    "Ref": "EMRMasterSG"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "31268c7b-be70-4d7c-b187-3cd868ab6614"
+                }
+            }
+        },
+        "EMRM3": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "IpProtocol": "UDP",
+                "FromPort": "0",
+                "ToPort": "65535",
+                "SourceSecurityGroupId": {
+                    "Ref": "EMRSlaveSG"
+                },
+                "GroupId": {
+                    "Ref": "EMRMasterSG"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "b7d2735c-0035-4a5f-93c9-4b842594b235"
+                }
+            }
+        },
+        "EMRM4": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "IpProtocol": "UDP",
+                "FromPort": "0",
+                "ToPort": "65535",
+                "SourceSecurityGroupId": {
+                    "Ref": "EMRMasterSG"
+                },
+                "GroupId": {
+                    "Ref": "EMRMasterSG"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "6e378096-db13-4349-bef7-576440c43c49"
+                }
+            }
+        },
+        "EMRM5": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "IpProtocol": "ICMP",
+                "FromPort": "8",
+                "ToPort": "0",
+                "SourceSecurityGroupId": {
+                    "Ref": "EMRSlaveSG"
+                },
+                "GroupId": {
+                    "Ref": "EMRMasterSG"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "1a4f66a5-9258-4b2a-803d-013f0bc10c7a"
+                }
+            }
+        },
+        "EMRM6": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "IpProtocol": "ICMP",
+                "FromPort": "8",
+                "ToPort": "0",
+                "SourceSecurityGroupId": {
+                    "Ref": "EMRMasterSG"
+                },
+                "GroupId": {
+                    "Ref": "EMRMasterSG"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "214dd294-8df7-4ccf-817e-2a3db5838af8"
+                }
+            }
+        }
     },
     "Outputs": {
         "TalendS3DomainName": {
