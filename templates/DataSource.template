@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "Enterprise Accelerator - Provides nesting for required stacks to deploy a full sample web application with reverse proxy, ELBs, IAM, and other resources (for demonstration/POC/testing) QS(0018)",
+    "Description": "EMR + Redshift",
     "Metadata": {
         "AWS::CloudFormation::Interface": {
             "ParameterGroups": [
@@ -26,6 +26,7 @@
                     },
                     "Parameters": [
                         "CreateEmr",
+						"EMRVPC",
                         "EmrSubnetA"
                     ]
                 },
@@ -37,13 +38,111 @@
                         "CreateRedshift",
                         "RedshiftSubnetA",
                         "RedshiftSubnetB",
-						"RedshiftUsername",						
+                        "RedshiftUsername",
                         "RedshiftPassword",
-						"RedshiftDbName",
-						"RedshiftPort"
+                        "RedshiftDbName",
+                        "RedshiftPort"
                     ]
                 }
             ]
+        },
+        "AWS::CloudFormation::Designer": {
+            "9798862f-0cbf-42cb-941d-56399399d015": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 360,
+                    "y": 90
+                },
+                "z": 1,
+                "embeds": []
+            },
+            "cd3aad74-b4de-45ad-9f63-7d60f18698b3": {
+                "size": {
+                    "width": 240,
+                    "height": 240
+                },
+                "position": {
+                    "x": 60,
+                    "y": 90
+                },
+                "z": 1,
+                "embeds": [
+                    "a304fc30-84da-426e-bbd8-e4d2dcd95ec5"
+                ]
+            },
+            "a304fc30-84da-426e-bbd8-e4d2dcd95ec5": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 90,
+                    "y": 150
+                },
+                "z": 2,
+                "parent": "cd3aad74-b4de-45ad-9f63-7d60f18698b3",
+                "embeds": [],
+                "dependson": [
+                    "cd3aad74-b4de-45ad-9f63-7d60f18698b3"
+                ]
+            },
+            "3ea3abb7-f1f7-4f93-a055-b50b91bf5cab": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 360,
+                    "y": 210
+                },
+                "z": 1,
+                "embeds": []
+            },
+            "2fe965db-2038-4005-86b5-e2f609ca86bc": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 360,
+                    "y": 330
+                },
+                "z": 1,
+                "embeds": [],
+                "isassociatedwith": [
+                    "3ea3abb7-f1f7-4f93-a055-b50b91bf5cab"
+                ],
+                "dependson": [
+                    "3ea3abb7-f1f7-4f93-a055-b50b91bf5cab"
+                ]
+            },
+            "c69c96cc-6920-4f27-a47f-29462d06915c": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 470,
+                    "y": 50
+                },
+                "z": 0,
+                "embeds": []
+            },
+            "69408061-6344-4886-a71b-ea332e879b90": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 470,
+                    "y": 140
+                },
+                "z": 0,
+                "embeds": []
+            }
         }
     },
     "Parameters": {
@@ -56,6 +155,10 @@
             "Description": "EMR Subnet A",
             "Type": "AWS::EC2::Subnet::Id"
         },
+		"EMRVPC": {
+            "Description": "EMR VPC",
+            "Type": "AWS::EC2::VPC::Id"
+        },
         "RedshiftSubnetA": {
             "Description": "Redshift subnet A",
             "Type": "AWS::EC2::Subnet::Id"
@@ -64,24 +167,23 @@
             "Description": "Redshift subnet B",
             "Type": "AWS::EC2::Subnet::Id"
         },
-		"RedshiftUsername": {
+        "RedshiftUsername": {
             "Description": "RedShift Username",
             "Type": "String"
         },
-		
         "RedshiftPassword": {
             "Description": "RedShift Password",
             "NoEcho": true,
             "Type": "String"
         },
-		"RedshiftDbName": {
+        "RedshiftDbName": {
             "Description": "RedShift Database name",
             "Type": "String"
         },
-		"RedshiftPort": {
+        "RedshiftPort": {
             "Description": "RedShift Port",
             "Type": "String",
-			"Default": "5439"
+            "Default": "5439"
         },
         "SupportsGlacier": {
             "Description": "Does this region support Glacier",
@@ -107,30 +209,37 @@
             ]
         }
     },
-    "Mappings": {
-    },
+    "Mappings": {},
     "Conditions": {
         "IsGovCloud": {
             "Fn::Equals": [
-                { "Ref": "AWS::Region" },
+                {
+                    "Ref": "AWS::Region"
+                },
                 "us-gov-west-1"
             ]
         },
         "SupportsGlacierCondition": {
             "Fn::Equals": [
-                { "Ref": "SupportsGlacier" },
+                {
+                    "Ref": "SupportsGlacier"
+                },
                 true
             ]
         },
         "CreateRedshiftCondition": {
             "Fn::Equals": [
-                { "Ref": "CreateRedshift" },
+                {
+                    "Ref": "CreateRedshift"
+                },
                 "true"
             ]
         },
         "CreateEmrCondition": {
             "Fn::Equals": [
-                { "Ref": "CreateEmr" },
+                {
+                    "Ref": "CreateEmr"
+                },
                 "true"
             ]
         }
@@ -163,13 +272,20 @@
                     "Status": "Enabled"
                 }
             },
-            "DeletionPolicy": "Delete"
+            "DeletionPolicy": "Delete",
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "3ea3abb7-f1f7-4f93-a055-b50b91bf5cab"
+                }
+            }
         },
         "TalendStorageS3Policy": {
             "Type": "AWS::S3::BucketPolicy",
             "DependsOn": "TalendStorageBucket",
             "Properties": {
-                "Bucket": { "Ref": "TalendStorageBucket" },
+                "Bucket": {
+                    "Ref": "TalendStorageBucket"
+                },
                 "PolicyDocument": {
                     "Statement": [
                         {
@@ -224,33 +340,63 @@
                         }
                     ]
                 }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "2fe965db-2038-4005-86b5-e2f609ca86bc"
+                }
             }
         },
-        
         "RedhsiftSubnetGroup": {
             "Type": "AWS::Redshift::ClusterSubnetGroup",
             "Condition": "CreateRedshiftCondition",
             "Properties": {
                 "Description": "RedShift Subnet linked to both private database subnets",
                 "SubnetIds": [
-                    { "Ref": "RedshiftSubnetA" },
-                    { "Ref": "RedshiftSubnetB" }
+                    {
+                        "Ref": "RedshiftSubnetA"
+                    },
+                    {
+                        "Ref": "RedshiftSubnetB"
+                    }
                 ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "cd3aad74-b4de-45ad-9f63-7d60f18698b3"
+                }
             }
         },
         "RedshiftInstance": {
             "Type": "AWS::Redshift::Cluster",
             "Condition": "CreateRedshiftCondition",
-            "DependsOn": [ "RedhsiftSubnetGroup" ],
+            "DependsOn": [
+                "RedhsiftSubnetGroup"
+            ],
             "Properties": {
-                "ClusterSubnetGroupName": { "Ref": "RedhsiftSubnetGroup" },
+                "ClusterSubnetGroupName": {
+                    "Ref": "RedhsiftSubnetGroup"
+                },
                 "ClusterType": "single-node",
                 "NodeType": "dc1.large",
-                "DBName": { "Ref": "RedshiftDbName" },
-                "MasterUsername": { "Ref": "RedshiftUsername" },
-                "MasterUserPassword": { "Ref": "RedshiftPassword" },
-                "Port": { "Ref": "RedshiftPort" },
+                "DBName": {
+                    "Ref": "RedshiftDbName"
+                },
+                "MasterUsername": {
+                    "Ref": "RedshiftUsername"
+                },
+                "MasterUserPassword": {
+                    "Ref": "RedshiftPassword"
+                },
+                "Port": {
+                    "Ref": "RedshiftPort"
+                },
                 "PubliclyAccessible": false
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "a304fc30-84da-426e-bbd8-e4d2dcd95ec5"
+                }
             }
         },
         "EmrInstance": {
@@ -271,8 +417,14 @@
                         "Name": "Core instance group - 2"
                     },
                     "TerminationProtected": false,
-                    "Ec2SubnetId": { "Ref": "EmrSubnetA" },
-                    "Ec2KeyName": { "Ref": "KeyPair" }
+                    "Ec2SubnetId": {
+                        "Ref": "EmrSubnetA"
+                    },
+                    "Ec2KeyName": {
+                        "Ref": "KeyPair"
+                    },
+					"EmrManagedMasterSecurityGroup" : {"Ref": "EMRMasterSG"},
+					"EmrManagedSlaveSecurityGroup" :  {"Ref": "EMRSlaveSG"}
                 },
                 "Applications": [
                     {
@@ -290,65 +442,324 @@
                 ],
                 "ReleaseLabel": "emr-5.0.0",
                 "Name": "EmrInstance",
+								
                 "JobFlowRole": "EMR_EC2_DefaultRole",
                 "ServiceRole": "EMR_DefaultRole",
                 "VisibleToAllUsers": true,
                 "Tags": [
                     {
                         "Key": "Name",
-                        "Value": { "Fn::Sub": "emr-instance-${AWS::StackName}" }
+                        "Value": {
+                            "Fn::Sub": "emr-instance-${AWS::StackName}"
+                        }
                     }
                 ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "9798862f-0cbf-42cb-941d-56399399d015"
+                }
             }
-        }
+        },
+        "EMRSlaveSG": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+			"GroupDescription": "EMR Slave Security Group",
+			"VpcId": {"Ref": "EMRVPC"},
+		  "SecurityGroupEgress" : [{
+         "IpProtocol" : "-1",
+         "FromPort" : "0",
+         "ToPort" : "65535",
+         "CidrIp" : "0.0.0.0/0"
+		  }]
+			},
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "c69c96cc-6920-4f27-a47f-29462d06915c"
+                }
+            }
+        },
+			"EMRS1": {
+			"Type" : "AWS::EC2::SecurityGroupIngress",
+			"Properties" : {
+            "IpProtocol" : "tcp",
+            "FromPort" : "0",
+            "ToPort" : "65535",
+            "SourceSecurityGroupId" : {"Ref" : "EMRSlaveSG"},
+			"GroupId" : {"Ref" : "EMRSlaveSG"}
+			}},	
+			
+			"EMRS2": {
+			"Type" : "AWS::EC2::SecurityGroupIngress",
+			"Properties" : {
+            "IpProtocol" : "tcp",
+            "FromPort" : "0",
+            "ToPort" : "65535",
+            "SourceSecurityGroupId" : {"Ref" : "EMRMasterSG"},
+			"GroupId" : {"Ref" : "EMRSlaveSG"}
+			}},	
+			
+			"EMRS3": {
+			"Type" : "AWS::EC2::SecurityGroupIngress",
+			"Properties" : {
+            "IpProtocol" : "UDP",
+            "FromPort" : "0",
+            "ToPort" : "65535",
+            "SourceSecurityGroupId" : {"Ref" : "EMRSlaveSG"},
+			"GroupId" : {"Ref" : "EMRSlaveSG"}
+			}},	
+			
+			"EMRS4": {
+			"Type" : "AWS::EC2::SecurityGroupIngress",
+			"Properties" : {
+            "IpProtocol" : "UDP",
+            "FromPort" : "0",
+            "ToPort" : "65535",
+            "SourceSecurityGroupId" : {"Ref" : "EMRMasterSG"},
+			"GroupId" : {"Ref" : "EMRSlaveSG"}
+			}},
+			
+			"EMRS5": {
+			"Type" : "AWS::EC2::SecurityGroupIngress",
+			"Properties" : {
+            "IpProtocol" : "ICMP",
+            "FromPort" : "8",
+            "ToPort" : "0",
+            "SourceSecurityGroupId" : {"Ref" : "EMRSlaveSG"},
+			"GroupId" : {"Ref" : "EMRSlaveSG"}
+			}},	
+			
+			"EMRS6": {
+			"Type" : "AWS::EC2::SecurityGroupIngress",
+			"Properties" : {
+            "IpProtocol" : "ICMP",
+            "FromPort" : "8",
+            "ToPort" : "0",
+            "SourceSecurityGroupId" : {"Ref" : "EMRMasterSG"},
+			"GroupId" : {"Ref" : "EMRSlaveSG"}
+			}},
+		
+		
+		
+        "EMRMasterSG": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {"GroupDescription": "EMR Master Security Group",
+			"VpcId": {"Ref": "EMRVPC"},
+			"SecurityGroupIngress" : [
+			{
+            "IpProtocol" : "tcp",
+            "FromPort" : "8443",
+            "ToPort" : "8443",
+            "CidrIp" : "207.171.167.101/32"
+			},
+			{
+            "IpProtocol" : "tcp",
+            "FromPort" : "8443",
+            "ToPort" : "8443",
+            "CidrIp" : "207.171.167.25/32"
+			},
+			{
+			"IpProtocol" : "tcp",
+            "FromPort" : "8443",
+            "ToPort" : "8443",
+            "CidrIp" : "207.171.167.26/32"
+			},
+			{
+			"IpProtocol" : "tcp",
+            "FromPort" : "8443",
+            "ToPort" : "8443",
+            "CidrIp" : "207.171.172.6/32"
+			},
+			{
+            "IpProtocol" : "tcp",
+            "FromPort" : "8443",
+            "ToPort" : "8443",
+            "CidrIp" : "72.21.217.0/24"
+			},
+			{
+			"IpProtocol" : "tcp",
+            "FromPort" : "8443",
+            "ToPort" : "8443",
+            "CidrIp" : "72.21.198.64/29"
+			},
+			{
+			"IpProtocol" : "tcp",
+            "FromPort" : "8443",
+            "ToPort" : "8443",
+            "CidrIp" : "72.21.196.64/29"
+			},
+			{
+			"IpProtocol" : "tcp",
+            "FromPort" : "8443",
+            "ToPort" : "8443",
+            "CidrIp" : "54.239.98.0/24"
+			},
+			{
+			"IpProtocol" : "tcp",
+            "FromPort" : "8443",
+            "ToPort" : "8443",
+            "CidrIp" : "54.240.217.16/29"
+			},
+			{
+            "IpProtocol" : "tcp",
+            "FromPort" : "8443",
+            "ToPort" : "8443",
+            "CidrIp" : "54.240.217.64/28"
+			},
+			{
+			"IpProtocol" : "tcp",
+            "FromPort" : "8443",
+            "ToPort" : "8443",
+            "CidrIp" : "54.240.217.8/29"
+			},
+			{
+			"IpProtocol" : "tcp",
+            "FromPort" : "8443",
+            "ToPort" : "8443",
+            "CidrIp" : "54.240.217.80/29"
+			}
+			
+			
+		 ],
+      "SecurityGroupEgress" : [{
+         "IpProtocol" : "-1",
+         "FromPort" : "0",
+         "ToPort" : "65535",
+         "CidrIp" : "0.0.0.0/0"
+      }]	
+			},
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "69408061-6344-4886-a71b-ea332e879b90"
+                }
+            }
+        },
+			"EMRM1": {
+			"Type" : "AWS::EC2::SecurityGroupIngress",
+			"Properties" : {
+            "IpProtocol" : "tcp",
+            "FromPort" : "0",
+            "ToPort" : "65535",
+            "SourceSecurityGroupId" : {"Ref" : "EMRSlaveSG"},
+			"GroupId" : {"Ref" : "EMRMasterSG"}
+			}},	
+			
+			"EMRM2": {
+			"Type" : "AWS::EC2::SecurityGroupIngress",
+			"Properties" : {
+            "IpProtocol" : "tcp",
+            "FromPort" : "0",
+            "ToPort" : "65535",
+            "SourceSecurityGroupId" : {"Ref" : "EMRMasterSG"},
+			"GroupId" : {"Ref" : "EMRMasterSG"}
+			}},	
+			
+			"EMRM3": {
+			"Type" : "AWS::EC2::SecurityGroupIngress",
+			"Properties" : {
+            "IpProtocol" : "UDP",
+            "FromPort" : "0",
+            "ToPort" : "65535",
+            "SourceSecurityGroupId" : {"Ref" : "EMRSlaveSG"},
+			"GroupId" : {"Ref" : "EMRMasterSG"}
+			}},	
+			
+			"EMRM4": {
+			"Type" : "AWS::EC2::SecurityGroupIngress",
+			"Properties" : {
+            "IpProtocol" : "UDP",
+            "FromPort" : "0",
+            "ToPort" : "65535",
+            "SourceSecurityGroupId" : {"Ref" : "EMRMasterSG"},
+			"GroupId" : {"Ref" : "EMRMasterSG"}
+			}},
+			
+			"EMRM5": {
+			"Type" : "AWS::EC2::SecurityGroupIngress",
+			"Properties" : {
+            "IpProtocol" : "ICMP",
+            "FromPort" : "8",
+            "ToPort" : "0",
+            "SourceSecurityGroupId" : {"Ref" : "EMRSlaveSG"},
+			"GroupId" : {"Ref" : "EMRMasterSG"}
+			}},	
+			
+			"EMRM6": {
+			"Type" : "AWS::EC2::SecurityGroupIngress",
+			"Properties" : {
+            "IpProtocol" : "ICMP",
+            "FromPort" : "8",
+            "ToPort" : "0",
+            "SourceSecurityGroupId" : {"Ref" : "EMRMasterSG"},
+			"GroupId" : {"Ref" : "EMRMasterSG"}
+			}}
     },
     "Outputs": {
-		"TalendS3DomainName": {
-            "Value": { "Fn::GetAtt": ["TalendStorageBucket","DomainName"] },
-			"Export": {
-				"Name": {
-					"Fn::Sub": "${AWS::StackName}:TalendS3DomainName" 
-				}
-			}
+        "TalendS3DomainName": {
+            "Value": {
+                "Fn::GetAtt": [
+                    "TalendStorageBucket",
+                    "DomainName"
+                ]
+            },
+            "Export": {
+                "Name": {
+                    "Fn::Sub": "${AWS::StackName}:TalendS3DomainName"
+                }
+            }
         },
-		"EmrMasterPublicDns": {
-			"Condition": "CreateEmrCondition",
-            "Value": { "Fn::GetAtt": ["EmrInstance","MasterPublicDNS"] },
-			"Export": {
-				"Name": {
-					"Fn::Sub": "${AWS::StackName}:EmrMasterPublicDns" 
-				}
-			}
+        "EmrMasterPublicDns": {
+            "Condition": "CreateEmrCondition",
+            "Value": {
+                "Fn::GetAtt": [
+                    "EmrInstance",
+                    "MasterPublicDNS"
+                ]
+            },
+            "Export": {
+                "Name": {
+                    "Fn::Sub": "${AWS::StackName}:EmrMasterPublicDns"
+                }
+            }
         },
         "RedshiftEndpoint": {
-			"Condition": "CreateRedshiftCondition",
-            "Value": { "Fn::GetAtt": [ "RedshiftInstance", "Endpoint.Address" ] },
-			"Export": {
-				"Name": {
-					"Fn::Sub": "${AWS::StackName}:RedshiftEndpoint" 
-				}
-			}
+            "Condition": "CreateRedshiftCondition",
+            "Value": {
+                "Fn::GetAtt": [
+                    "RedshiftInstance",
+                    "Endpoint.Address"
+                ]
+            },
+            "Export": {
+                "Name": {
+                    "Fn::Sub": "${AWS::StackName}:RedshiftEndpoint"
+                }
+            }
         },
         "RedshiftPort": {
-			"Condition": "CreateRedshiftCondition",
-            "Value": { "Fn::GetAtt": [ "RedshiftInstance", "Endpoint.Port" ] },
-			"Export": {
-				"Name": {
-					"Fn::Sub": "${AWS::StackName}:RedshiftPort" 
-				}
-			}
+            "Condition": "CreateRedshiftCondition",
+            "Value": {
+                "Fn::GetAtt": [
+                    "RedshiftInstance",
+                    "Endpoint.Port"
+                ]
+            },
+            "Export": {
+                "Name": {
+                    "Fn::Sub": "${AWS::StackName}:RedshiftPort"
+                }
+            }
         },
-		"RedshiftJdbcUrl": {
-			"Condition": "CreateRedshiftCondition",
-			"Value": {
+        "RedshiftJdbcUrl": {
+            "Condition": "CreateRedshiftCondition",
+            "Value": {
                 "Fn::Sub": "jdbc:redshift://${RedshiftInstance.Endpoint.Address}:${RedshiftInstance.Endpoint.Port}/${RedshiftDbName}"
             },
-			"Export": {
-				"Name": {
-					"Fn::Sub": "${AWS::StackName}:RedshiftJdbcUrl" 
-				}
-			}
+            "Export": {
+                "Name": {
+                    "Fn::Sub": "${AWS::StackName}:RedshiftJdbcUrl"
+                }
+            }
         }
     }
 }
-
