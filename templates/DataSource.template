@@ -463,6 +463,7 @@
         },
         "EMRSlaveSG": {
             "Type": "AWS::EC2::SecurityGroup",
+			"DeletionPolicy" : "Retain",
             "Properties": {
 			"GroupDescription": "EMR Slave Security Group",
 			"VpcId": {"Ref": "EMRVPC"},
@@ -543,6 +544,7 @@
 		
         "EMRMasterSG": {
             "Type": "AWS::EC2::SecurityGroup",
+			"DeletionPolicy" : "Retain",
             "Properties": {"GroupDescription": "EMR Master Security Group",
 			"VpcId": {"Ref": "EMRVPC"},
 			"SecurityGroupIngress" : [
