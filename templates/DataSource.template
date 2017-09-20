@@ -614,7 +614,7 @@
                 "EMRMasterSG"
             ]
         },
-        "EMRS1": {
+        "EmrSlaveIngressSlave": {
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "IpProtocol": "tcp",
@@ -633,7 +633,7 @@
                 }
             }
         },
-        "EMRS2": {
+        "EmrSlaveIngressMaster": {
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "IpProtocol": "tcp",
@@ -652,7 +652,7 @@
                 }
             }
         },
-        "EMRS3": {
+        "EmrSlaveIngressSlaveUDP": {
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "IpProtocol": "UDP",
@@ -671,7 +671,7 @@
                 }
             }
         },
-        "EMRS4": {
+        "EmrSlaveIngressMasterUDP": {
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "IpProtocol": "UDP",
@@ -690,7 +690,7 @@
                 }
             }
         },
-        "EMRS5": {
+        "EmrSlaveIngressSlaveICMP": {
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "IpProtocol": "ICMP",
@@ -709,7 +709,7 @@
                 }
             }
         },
-        "EMRS6": {
+        "EmrSlaveIngressMasterICMP": {
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "IpProtocol": "ICMP",
@@ -825,7 +825,7 @@
                 }
             }
         },
-        "EMRM1": {
+        "EmrMasterIngressSlave": {
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "IpProtocol": "tcp",
@@ -844,7 +844,7 @@
                 }
             }
         },
-        "EMRM2": {
+        "EmrMasterIngressMaster": {
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "IpProtocol": "tcp",
@@ -863,7 +863,7 @@
                 }
             }
         },
-        "EMRM3": {
+        "EmrMasterIngressSlaveUDP": {
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "IpProtocol": "UDP",
@@ -882,7 +882,7 @@
                 }
             }
         },
-        "EMRM4": {
+        "EmrMasterIngressMasterUDP": {
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "IpProtocol": "UDP",
@@ -901,7 +901,7 @@
                 }
             }
         },
-        "EMRM5": {
+        "EmrMasterIngressSlaveICMP": {
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "IpProtocol": "ICMP",
@@ -920,7 +920,7 @@
                 }
             }
         },
-        "EMRM6": {
+        "EmrMasterIngressMasterICMP": {
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "IpProtocol": "ICMP",
@@ -941,6 +941,32 @@
         }
     },
     "Outputs": {
+	"EMRMasterSGID": {
+            "Value": {
+                "Fn::GetAtt": [
+                    "EMRMasterSG",
+                    "GroupId"
+                ]
+            },
+            "Export": {
+                "Name": {
+                    "Fn::Sub": "${AWS::StackName}:EMRMasterSGID"
+                }
+            }
+        },
+		"EMRSlaveSGID": {
+            "Value": {
+                "Fn::GetAtt": [
+                    "EMRSlaveSG",
+                    "GroupId"
+                ]
+            },
+            "Export": {
+                "Name": {
+                    "Fn::Sub": "${AWS::StackName}:EMRSlaveSGID"
+                }
+            }
+        },
         "TalendS3DomainName": {
             "Value": {
                 "Fn::GetAtt": [
