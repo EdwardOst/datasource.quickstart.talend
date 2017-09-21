@@ -550,6 +550,9 @@
                     "EmrManagedMasterSecurityGroup": {
                         "Ref": "EMRMasterSG"
                     },
+					"ServiceAccessSecurityGroup": {
+                        "Ref": "EMRMasterSG"
+                    },
                     "EmrManagedSlaveSecurityGroup": {
                         "Ref": "EMRSlaveSG"
                     }
