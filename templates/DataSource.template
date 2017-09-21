@@ -551,7 +551,7 @@
                         "Ref": "EMRMasterSG"
                     },
 					"ServiceAccessSecurityGroup": {
-                        "Ref": "EMRMasterSG"
+                        "Ref": "EMRServiceSG"
                     },
                     "EmrManagedSlaveSecurityGroup": {
                         "Ref": "EMRSlaveSG"
@@ -588,6 +588,29 @@
             "Metadata": {
                 "AWS::CloudFormation::Designer": {
                     "id": "9798862f-0cbf-42cb-941d-56399399d015"
+                }
+            }
+        },
+		"EMRServiceSG": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "DeletionPolicy": "Delete",
+            "Properties": {
+                "GroupDescription": "EMR Service Security Group",
+                "VpcId": {
+                    "Ref": "EMRVPC"
+                },
+                "SecurityGroupEgress": [
+                    {
+                        "IpProtocol": "-1",
+                        "FromPort": "0",
+                        "ToPort": "65535",
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "c69c96cc-6920-4f27-a47f-29462d06915c"
                 }
             }
         },
