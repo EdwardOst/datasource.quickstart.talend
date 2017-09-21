@@ -612,7 +612,10 @@
                 "AWS::CloudFormation::Designer": {
                     "id": "c69c96cc-6920-4f27-a47f-29462d06915c"
                 }
-            }
+            },
+            "DependsOn": [
+                "EMRMasterSG"
+            ]
         },
         "EMRSlaveSG": {
             "Type": "AWS::EC2::SecurityGroup",
